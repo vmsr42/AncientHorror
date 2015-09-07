@@ -51,6 +51,7 @@
     <Compile Include="Server\LobbyRoom.cs" />
     <Compile Include="Server\Messaging\AbonentsCommand\AbonentsCommandMessage.cs" />
     <Compile Include="Server\Messaging\AbonentsCommand\AbonentsCommandType.cs" />
+    <Compile Include="Server\Messaging\AbonentsCommand\KickUserMessage.cs" />
     <Compile Include="Server\Messaging\AbonentsCommand\StartRoomMessage.cs" />
     <Compile Include="Server\Messaging\AbonentsCommand\RequestRoomInfoMessage.cs" />
     <Compile Include="Server\Messaging\AbonentsCommand\ExitRoomMessage.cs" />

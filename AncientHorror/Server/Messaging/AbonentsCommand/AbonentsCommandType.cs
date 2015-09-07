@@ -15,7 +15,8 @@ namespace AncientHorror.Server.Messaging.AbonentsCommand
         JoinRoom,
         CreateRoom,
         RequestRoomInfo,
-        StartRoom
+        StartRoom,
+        KickUser
 
     }
 }

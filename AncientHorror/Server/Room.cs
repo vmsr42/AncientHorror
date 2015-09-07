@@ -126,11 +126,15 @@ namespace AncientHorror.Server
                 {
                     ab.Sock.Close();
                     this.abntsList.TryTake(out ab);
+                    if (ab.Gamer.Id==this.Owner.Id)
+                        AfterRemoveOwner()
                 }
             }
             catch { }
 
         }
+
+        protected abstract void AfterRemoveOwner();
         public bool RemoveAbonent(Abonent ab)
         {
             if (abntsList.TryTake(out ab))

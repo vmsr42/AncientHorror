@@ -77,6 +77,15 @@ namespace AncientHorror.Server.Messaging.AbonentsCommand
                     {
                         return new StartRoomMessage();
                     }
+                    case AbonentsCommandType.KickUser:
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(KickUserMessage));
+                        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(Message)))
+                        {
+                            KickUserMessage msg = (KickUserMessage)serializer.Deserialize(stream);
+                            return msg;
+                        }
+                    }
 
             }
             return null;

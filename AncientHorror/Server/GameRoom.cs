@@ -34,6 +34,10 @@ namespace AncientHorror.Server
                     {
                         if (this.RemoveAbonent(ab))
                             Program.Lobby.AddAbonent(ab);
+                            if (ab.Gamer.Id == this.Owner.Id)
+                            {
+                                AfterRemoveOwner();
+                            }
                         else
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось покинуть комнату...мухаха" };
@@ -52,8 +56,28 @@ namespace AncientHorror.Server
                     {
                         break;
                     }
+                case AbonentsCommandType.KickUser:
+                    {
+                        KickUserMessage kickmsg = (KickUserMessage)acMsg.GetInnerMessage();
+                        Abonent kickedab = this.abntsList.FirstOrDefault(a => a.Gamer.Id==kickmsg.UserId);
+                        if (kickedab!=null)
+                        {
+                            if (this.RemoveAbonent(kickedab))
+                                Program.Lobby.AddAbonent(kickedab);
+                        }
+                        break;
+                    }
  
             }
+        }
+        protected override void AfterRemoveOwner()
+        {
+            foreach (var remab in abntsList)
+            {
+                this.RemoveAbonent(remab);
+                Program.Lobby.AddAbonent(remab);
+            }
+            Program.Rooms.Remove(this);
         }
     }
 }

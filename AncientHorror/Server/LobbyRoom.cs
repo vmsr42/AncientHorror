@@ -88,5 +88,10 @@ namespace AncientHorror.Server
 
             }
         }
+
+        protected override void AfterRemoveOwner()
+        {
+            
+        }
     }
 }
