@@ -1,6 +1,6 @@
-﻿using AncientHorror.Server.Messaging;
-using AncientHorror.Server.Messaging.AbonentsCommand;
-using AncientHorror.Server.Messaging.InfoMessage;
+﻿using AncientHorrorShare;
+using AncientHorrorShare.Messaging.AbonentsCommand;
+using AncientHorrorShare.Messaging.InfoMessage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +41,9 @@ namespace AncientHorror.Server
                         else
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось покинуть комнату...мухаха" };
-                            ab.SendMessage(error.GetServerMessage(ab));
+                            var smsg = error.GetServerMessage();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
                         }
                         break;
                     }

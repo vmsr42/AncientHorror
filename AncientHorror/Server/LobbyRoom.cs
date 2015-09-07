@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AncientHorror.Server.Messaging;
-using AncientHorror.Server.Messaging.AbonentsCommand;
-using AncientHorror.Server.Messaging.InfoMessage;
+using AncientHorrorShare.Messaging.AbonentsCommand;
+using AncientHorrorShare.Messaging.InfoMessage;
+using AncientHorrorShare;
 namespace AncientHorror.Server
 {
     public class LobbyRoom: Room
@@ -51,7 +51,9 @@ namespace AncientHorror.Server
                         else
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось создать комнату" };
-                            ab.SendMessage(error.GetServerMessage(ab));
+                            var smsg = error.GetServerMessage();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
                         }
                         
                         break;
@@ -67,7 +69,9 @@ namespace AncientHorror.Server
                             else
                             {
                                 ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось подключиться к комнате" };
-                                ab.SendMessage(error.GetServerMessage(ab));
+                                var smsg = error.GetServerMessage();
+                                smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                                ab.SendMessage(smsg);
                             }
                         }
                         break;
@@ -82,7 +86,9 @@ namespace AncientHorror.Server
                                 riMessage.RoomNames.Add(room.Name);
                                 riMessage.Owners.Add(room.Owner);
                             }
-                        ab.SendMessage(riMessage.GetServerMessage(ab));
+                        var smsg = riMessage.GetServerMessage();
+                        smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                        ab.SendMessage(smsg);
                         break;
                     }
 

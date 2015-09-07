@@ -35,6 +35,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,31 +53,17 @@
     <Compile Include="Server\AbonentStatusEnum.cs" />
     <Compile Include="Server\GameRoom.cs" />
     <Compile Include="Server\LobbyRoom.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\AbonentsCommandMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\AbonentsCommandType.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\KickUserMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\StartRoomMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\RequestRoomInfoMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\ExitRoomMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\CreateRoomMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\JoinRoomMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\ExitMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\UnAuthorizationMessage.cs" />
-    <Compile Include="Server\Messaging\AbonentsCommand\AuthorizationMessage.cs" />
-    <Compile Include="Server\Messaging\InfoMessage\ServerInfoErrorMessage.cs" />
-    <Compile Include="Server\Messaging\InfoMessage\ServerInfoRoomsMessage.cs" />
-    <Compile Include="Server\Messaging\InfoMessage\ServerInfoAbonentsMessage.cs" />
-    <Compile Include="Server\Messaging\InfoMessage\ServerInfoMessage.cs" />
-    <Compile Include="Server\Messaging\InfoMessage\ServerInfoMessageType.cs" />
-    <Compile Include="Server\Messaging\ServerMessage.cs" />
-    <Compile Include="GameAbonent.cs" />
-    <Compile Include="Server\Messaging\ServerMessageType.cs" />
     <Compile Include="Server\Room.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AncientHorrorShared\AncientHorrorShared.csproj">
+      <Project>{0db02c1a-cd42-445e-a03e-4d9cb3735480}</Project>
+      <Name>AncientHorrorShared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

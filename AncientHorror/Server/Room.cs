@@ -1,6 +1,7 @@
-using AncientHorror.Server.Messaging;
-using AncientHorror.Server.Messaging.AbonentsCommand;
-using AncientHorror.Server.Messaging.InfoMessage;
+using AncientHorrorShare;
+using AncientHorrorShare.Messaging;
+using AncientHorrorShare.Messaging.AbonentsCommand;
+using AncientHorrorShare.Messaging.InfoMessage;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -76,7 +77,9 @@ namespace AncientHorror.Server
                 var msg = new ServerInfoAbonentsMessage() { };
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
-                this.SendMessage(msg.GetServerMessage(ab));
+                var smsg = msg.GetServerMessage();
+                smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                this.SendMessage(smsg);
                 ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
                 return true;
             }
@@ -126,8 +129,8 @@ namespace AncientHorror.Server
                 {
                     ab.Sock.Close();
                     this.abntsList.TryTake(out ab);
-                    if (ab.Gamer.Id==this.Owner.Id)
-                        AfterRemoveOwner()
+                    if (ab.Gamer.Id == this.Owner.Id)
+                        AfterRemoveOwner();
                 }
             }
             catch { }
@@ -142,7 +145,9 @@ namespace AncientHorror.Server
                 var msg = new ServerInfoAbonentsMessage() { };
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
-                this.SendMessage(msg.GetServerMessage(ab));
+                var smsg = msg.GetServerMessage();
+                smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                this.SendMessage(smsg);
                 return true;
             }
             else

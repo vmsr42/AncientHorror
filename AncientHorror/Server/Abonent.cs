@@ -1,4 +1,5 @@
-﻿using AncientHorror.Server.Messaging;
+﻿using AncientHorrorShare;
+using AncientHorrorShare.Messaging;
 using System;
 using System.Collections.Generic;
 using System.IO;

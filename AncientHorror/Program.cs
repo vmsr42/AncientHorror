@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Windows.Forms;
-using AncientHorror.Server.Messaging;
+using AncientHorrorShare;
 
 namespace AncientHorror
 {
