@@ -1,5 +1,5 @@
-﻿using AncientHorrorShare;
-using AncientHorrorShare.Messaging;
+﻿using AncientHorrorShared;
+using AncientHorrorShared.Messaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,10 +19,10 @@ namespace AncientHorror.Server
         public byte[] buffer = new byte[4096];
         public StringBuilder sb = new StringBuilder();
         public int RoomId { get; set; }
-        public void SendMessage(ServerMessage msg)
+        public void SendMessage(TransportContainer msg)
         {
             
-                XmlSerializer writer = new XmlSerializer(typeof(ServerMessage));
+                XmlSerializer writer = new XmlSerializer(typeof(TransportContainer));
                 using (MemoryStream ms = new MemoryStream())
                 {
                     writer.Serialize(ms, msg);

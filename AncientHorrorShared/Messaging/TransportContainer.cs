@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AncientHorrorShared.Messaging.AbonentsCommand;
+using AncientHorrorShared.Messaging.InfoMessage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,54 +9,51 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShared.Messaging.InfoMessage
+namespace AncientHorrorShared.Messaging
 {
     [DataContract]
-    public class ServerInfoMessage: BaseMessage
+    public class TransportContainer: BaseMessage
     {
         [DataMember]
-        public SIMessageType Type { get; set; }
+        public TCTypes Type { get; set; }
         [DataMember]
         public String Message { get; set; }
-        public ServerInfoMessage() : base(new DataContractSerializer(typeof(ServerInfoMessage))) { }
-
+        [DataMember]
+        public GameAbonent Sender { get; set; }
+        public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer))) { }
         public override BaseMessage GetInnerMessage()
         {
             switch (Type)
             {
-                case SIMessageType.Abonents:
+                case TCTypes.Info:
                     {
-                        ServerInfoAbonentsMessage msg = new ServerInfoAbonentsMessage();
+                        ServerInfoMessage msg = new ServerInfoMessage();
                         msg.UTFDeSerialize(this.Message);
                         return msg;
                     }
-                case SIMessageType.Rooms:
+                case TCTypes.AbonentCommand:
                     {
-                        ServerInfoRoomsMessage msg = new ServerInfoRoomsMessage();
+                        AbonentsCommandMessage msg = new AbonentsCommandMessage();
                         msg.UTFDeSerialize(this.Message);
                         return msg;
                     }
-                case SIMessageType.Error:
-                    {
-                        ServerInfoErrorMessage msg = new ServerInfoErrorMessage();
-                        msg.UTFDeSerialize(this.Message);
-                        return msg;
-                    }
+                     
             }
             return null;
         }
 
         protected override void CopyMessageField(BaseMessage msg)
         {
-            ServerInfoMessage copymsg = (ServerInfoMessage)msg;
+            TransportContainer copymsg = (TransportContainer)msg;
             this.Message = copymsg.Message;
             this.Type = copymsg.Type;
+            this.Sender = copymsg.Sender;
+            this.MsgId = this.MsgId;
         }
 
         protected override TransportContainer TKCreation(string text)
         {
-            var msg = new TransportContainer() { Message = text, Type = TCTypes.Info, MsgId = this.MsgId };
-            return msg;
+            return new TransportContainer() { Message = this.Message, Sender = this.Sender, MsgId = this.MsgId, Type = this.Type };
         }
     }
 }

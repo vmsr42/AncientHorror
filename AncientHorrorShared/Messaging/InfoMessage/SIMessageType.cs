@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AncientHorrorShare.Messaging
+namespace AncientHorrorShared.Messaging.InfoMessage
 {
-    public enum ServerMessageType
+    public enum SIMessageType
     {
-        Info,
-        AbonentCommand
+        Abonents,
+        Rooms,
+        Error
     }
 }

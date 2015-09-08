@@ -7,24 +7,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShare.Messaging.AbonentsCommand
+namespace AncientHorrorShared.Messaging.AbonentsCommand
 {
     [DataContract]
-    public class ExitRoomMessage
+    public class ExitRoomMessage: BaseMessage
     {
-        public ServerMessage GetServerMessage()
+        public ExitRoomMessage() : base(new DataContractSerializer(typeof(ExitRoomMessage))) { }
+        protected override TransportContainer TKCreation(string text)
         {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(ExitRoomMessage));
-            AbonentsCommandMessage ac = new AbonentsCommandMessage() { Message = String.Empty, Type = AbonentsCommandType.Exit };
-
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, this);
-                byte[] data = stream.ToArray();
-                ac.Message = Encoding.UTF8.GetString(data, 0, data.Length);
-            }
-            return ac.GetServerMessage();
-
+            var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.ExitRoom, MsgId = this.MsgId };
+            return msg.GetTC();
+        }
+        protected override void CopyMessageField(BaseMessage msg)
+        {
+        }
+        public override BaseMessage GetInnerMessage()
+        {
+            return null;
         }
     }
 }

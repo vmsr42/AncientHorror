@@ -7,28 +7,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShare.Messaging.AbonentsCommand
+namespace AncientHorrorShared.Messaging.AbonentsCommand
 {
     [DataContract]
-    public class JoinRoomMessage
+    public class JoinRoomMessage: BaseMessage
     {
         [DataMember]
         public int RoomId { get; set; }
         [DataMember]
         public string Password { get; set; }
-        public ServerMessage GetServerMessage()
+
+        public JoinRoomMessage() : base(new DataContractSerializer(typeof(JoinRoomMessage))) { }
+        protected override TransportContainer TKCreation(string text)
         {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(JoinRoomMessage));
-            AbonentsCommandMessage ac = new AbonentsCommandMessage() { Message = String.Empty, Type = AbonentsCommandType.Exit };
-
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, this);
-                byte[] data = stream.ToArray();
-                ac.Message = Encoding.UTF8.GetString(data, 0, data.Length);
-            }
-            return ac.GetServerMessage();
-
+            var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.JoinRoom, MsgId = this.MsgId };
+            return msg.GetTC();
+        }
+        protected override void CopyMessageField(BaseMessage msg)
+        {
+            JoinRoomMessage copymsg = (JoinRoomMessage)msg;
+            this.RoomId = copymsg.RoomId;
+            this.Password = copymsg.Password;
+        }
+        public override BaseMessage GetInnerMessage()
+        {
+            return null;
         }
     }
 }

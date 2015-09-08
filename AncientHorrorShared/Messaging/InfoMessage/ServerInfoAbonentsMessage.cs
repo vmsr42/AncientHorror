@@ -7,25 +7,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShare.Messaging.InfoMessage
+namespace AncientHorrorShared.Messaging.InfoMessage
 {
     [DataContract]
-    public class ServerInfoAbonentsMessage
+    public class ServerInfoAbonentsMessage: BaseMessage
     {
         [DataMember]
         public List<GameAbonent> Abonents { get; set; }
-        public ServerMessage GetServerMessage()
+        public ServerInfoAbonentsMessage() : base(new DataContractSerializer(typeof(ServerInfoAbonentsMessage))) { }
+        protected override TransportContainer TKCreation(string text)
         {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(ServerInfoAbonentsMessage));
-            ServerInfoMessage sim = new ServerInfoMessage() { Message = String.Empty, Type = ServerInfoMessageType.Abonents };
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, this);
-                byte[] data = stream.ToArray();
-                sim.Message = Encoding.UTF8.GetString(data, 0, data.Length);
-            }
-            return sim.GetServerMessage();
-            
+            var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Abonents, MsgId = this.MsgId };
+            return simmsg.GetTC();
+        }
+
+        protected override void CopyMessageField(BaseMessage msg)
+        {
+            ServerInfoAbonentsMessage copymsg = (ServerInfoAbonentsMessage)msg;
+            this.Abonents = copymsg.Abonents;
+        }
+
+        public override BaseMessage GetInnerMessage()
+        {
+            return null;
         }
     }
     

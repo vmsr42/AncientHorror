@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AncientHorrorShare.Messaging.AbonentsCommand
+namespace AncientHorrorShared.Messaging.AbonentsCommand
 {
     public enum AbonentsCommandType
     {

@@ -7,26 +7,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShare.Messaging.InfoMessage
+namespace AncientHorrorShared.Messaging.InfoMessage
 {
     [DataContract]
-    public class ServerInfoErrorMessage
+    public class ServerInfoErrorMessage: BaseMessage
     {
         [DataMember]
         public String Error { get; set; }
-        public ServerMessage GetServerMessage()
+        public ServerInfoErrorMessage() : base(new DataContractSerializer(typeof(ServerInfoErrorMessage))) { }
+        protected override TransportContainer TKCreation(string text)
         {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(ServerInfoErrorMessage));
-            ServerInfoMessage sim = new ServerInfoMessage() { Message = String.Empty, Type = ServerInfoMessageType.Error };
+            var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Error, MsgId = this.MsgId };
+            return simmsg.GetTC();
+        }
 
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, this);
-                byte[] data = stream.ToArray();
-                sim.Message = Encoding.UTF8.GetString(data, 0, data.Length);
-            }
-            return sim.GetServerMessage();
-            
+        protected override void CopyMessageField(BaseMessage msg)
+        {
+            ServerInfoErrorMessage copymsg = (ServerInfoErrorMessage)msg;
+            this.Error = copymsg.Error;
+        }
+        public override BaseMessage GetInnerMessage()
+        {
+            return null;
         }
     }
     

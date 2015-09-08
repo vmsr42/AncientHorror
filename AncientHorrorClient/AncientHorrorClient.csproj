@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Test.cs" />
     <Compile Include="WaveCanvas.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -101,6 +102,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AncientHorrorShared\AncientHorrorShared.csproj">
+      <Project>{0db02c1a-cd42-445e-a03e-4d9cb3735480}</Project>
+      <Name>AncientHorrorShared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WEAncientHorror\WEAncientHorrorProject\WEAncientHorrorProject.csproj">
       <Project>{ec414f9a-58c0-43a1-9ff6-e29e7c34a576}</Project>
       <Name>WEAncientHorrorProject</Name>

@@ -49,13 +49,14 @@
     <Compile Include="Messaging\AbonentsCommand\RequestRoomInfoMessage.cs" />
     <Compile Include="Messaging\AbonentsCommand\StartRoomMessage.cs" />
     <Compile Include="Messaging\AbonentsCommand\UnAuthorizationMessage.cs" />
+    <Compile Include="Messaging\BaseMessage.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoAbonentsMessage.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoErrorMessage.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoMessage.cs" />
-    <Compile Include="Messaging\InfoMessage\ServerInfoMessageType.cs" />
+    <Compile Include="Messaging\InfoMessage\SIMessageType.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoRoomsMessage.cs" />
-    <Compile Include="Messaging\ServerMessage.cs" />
-    <Compile Include="Messaging\ServerMessageType.cs" />
+    <Compile Include="Messaging\TransportContainer.cs" />
+    <Compile Include="Messaging\TCTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

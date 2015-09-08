@@ -1,7 +1,7 @@
-using AncientHorrorShare;
-using AncientHorrorShare.Messaging;
-using AncientHorrorShare.Messaging.AbonentsCommand;
-using AncientHorrorShare.Messaging.InfoMessage;
+using AncientHorrorShared;
+using AncientHorrorShared.Messaging;
+using AncientHorrorShared.Messaging.AbonentsCommand;
+using AncientHorrorShared.Messaging.InfoMessage;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -55,11 +55,11 @@ namespace AncientHorror.Server
             Owner = own;
         }
         protected BlockingCollection<Abonent> abntsList = new BlockingCollection<Abonent>();
-        public void SendMessage(ServerMessage msg)
+        public void SendMessage(TransportContainer msg)
         {
             foreach (var abn in abntsList)
             {
-                XmlSerializer writer = new XmlSerializer(typeof(ServerMessage));
+                XmlSerializer writer = new XmlSerializer(typeof(TransportContainer));
                 using (MemoryStream ms = new MemoryStream())
                 {
                     writer.Serialize(ms, msg);
@@ -77,7 +77,7 @@ namespace AncientHorror.Server
                 var msg = new ServerInfoAbonentsMessage() { };
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
-                var smsg = msg.GetServerMessage();
+                var smsg = msg.GetTC();
                 smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                 this.SendMessage(smsg);
                 ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
@@ -98,11 +98,11 @@ namespace AncientHorror.Server
                 {
                     using (MemoryStream ms = new MemoryStream(ab.buffer))
                     {
-                        XmlSerializer reader = new XmlSerializer(typeof(ServerMessage));
-                        ServerMessage msg = (ServerMessage)reader.Deserialize(ms);
+                        XmlSerializer reader = new XmlSerializer(typeof(TransportContainer));
+                        TransportContainer msg = (TransportContainer)reader.Deserialize(ms);
                         switch(msg.Type)
                         { 
-                            case ServerMessageType.AbonentCommand:
+                            case TCTypes.AbonentCommand:
                                 {
                                     AbonentsCommandMessage acmsg = (AbonentsCommandMessage)msg.GetInnerMessage();
                                     AfterRecieveCommand(acmsg, ab);
@@ -145,7 +145,7 @@ namespace AncientHorror.Server
                 var msg = new ServerInfoAbonentsMessage() { };
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
-                var smsg = msg.GetServerMessage();
+                var smsg = msg.GetTC();
                 smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                 this.SendMessage(smsg);
                 return true;

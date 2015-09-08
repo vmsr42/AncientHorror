@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShare.Messaging.InfoMessage
+namespace AncientHorrorShared.Messaging.InfoMessage
 {
     [DataContract]
-    public class ServerInfoRoomsMessage
+    public class ServerInfoRoomsMessage: BaseMessage
     {
         [DataMember]
         public List<int> RoomIds { get; set; }
@@ -18,19 +18,22 @@ namespace AncientHorrorShare.Messaging.InfoMessage
         public List<String> RoomNames { get; set; }
         [DataMember]
         public List<GameAbonent> Owners { get; set; }
-        public ServerMessage GetServerMessage()
+        public ServerInfoRoomsMessage() : base(new DataContractSerializer(typeof(ServerInfoRoomsMessage))) { }
+        protected override TransportContainer TKCreation(string text)
         {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(ServerInfoRoomsMessage));
-            ServerInfoMessage sim = new ServerInfoMessage() { Message = String.Empty, Type = ServerInfoMessageType.Abonents };
-
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, this);
-                byte[] data = stream.ToArray();
-                sim.Message = Encoding.UTF8.GetString(data, 0, data.Length);
-            }
-            return sim.GetServerMessage();
-            
+            var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Rooms, MsgId = this.MsgId };
+            return simmsg.GetTC();
+        }
+        protected override void CopyMessageField(BaseMessage msg)
+        {
+            ServerInfoRoomsMessage copymsg = (ServerInfoRoomsMessage)msg;
+            this.RoomIds = copymsg.RoomIds;
+            this.RoomNames = copymsg.RoomNames;
+            this.Owners = copymsg.Owners;
+        }
+        public override BaseMessage GetInnerMessage()
+        {
+            return null;
         }
     }
     

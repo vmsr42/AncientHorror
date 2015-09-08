@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AncientHorrorShare.Messaging.AbonentsCommand;
-using AncientHorrorShare.Messaging.InfoMessage;
-using AncientHorrorShare;
+using AncientHorrorShared.Messaging.AbonentsCommand;
+using AncientHorrorShared.Messaging.InfoMessage;
+using AncientHorrorShared;
 namespace AncientHorror.Server
 {
     public class LobbyRoom: Room
@@ -51,7 +51,7 @@ namespace AncientHorror.Server
                         else
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось создать комнату" };
-                            var smsg = error.GetServerMessage();
+                            var smsg = error.GetTC();
                             smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
@@ -69,7 +69,7 @@ namespace AncientHorror.Server
                             else
                             {
                                 ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось подключиться к комнате" };
-                                var smsg = error.GetServerMessage();
+                                var smsg = error.GetTC();
                                 smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                                 ab.SendMessage(smsg);
                             }
@@ -86,7 +86,7 @@ namespace AncientHorror.Server
                                 riMessage.RoomNames.Add(room.Name);
                                 riMessage.Owners.Add(room.Owner);
                             }
-                        var smsg = riMessage.GetServerMessage();
+                        var smsg = riMessage.GetTC();
                         smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                         ab.SendMessage(smsg);
                         break;

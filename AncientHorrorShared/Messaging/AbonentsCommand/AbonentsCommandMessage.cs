@@ -7,90 +7,83 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace AncientHorrorShare.Messaging.AbonentsCommand
+namespace AncientHorrorShared.Messaging.AbonentsCommand
 {
     [DataContract]
-    public class AbonentsCommandMessage
+    public class AbonentsCommandMessage: BaseMessage
     {
         [DataMember]
         public AbonentsCommandType Type { get; set; }
         [DataMember]
         public String Message { get; set; }
-        public ServerMessage GetServerMessage()
-        {
-            ServerMessage sm = new ServerMessage() { Type = ServerMessageType.Info };
-            using (var stream = new MemoryStream())
-            {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(AbonentsCommandMessage));
-                serializer.WriteObject(stream, this);
-                byte[] data = stream.ToArray();
-                sm.Message = Encoding.UTF8.GetString(data,0,data.Length);
-            }
-            return sm;
-        }
-        public object GetInnerMessage()
+        public AbonentsCommandMessage() : base(new DataContractSerializer(typeof(AbonentsCommandMessage))) { }
+        public override BaseMessage GetInnerMessage()
         {
             switch (Type)
             {
                 case AbonentsCommandType.Authorization: 
                     {
-                        DataContractSerializer serializer = new DataContractSerializer(typeof(AuthorizationMessage));
-                        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(Message)))
-                        {
-                            AuthorizationMessage msg = (AuthorizationMessage)serializer.ReadObject(stream);
-                            return msg;
-                        }
+                        AuthorizationMessage msg = new AuthorizationMessage();
+                        msg.UTFDeSerialize(this.Message);
+                        return msg;
                     }
                 case AbonentsCommandType.UnAuthorization:
                     {
-                        return new UnAuthorizationMessage();
+                        return new UnAuthorizationMessage() { MsgId = this.MsgId };
                     }
                 case AbonentsCommandType.Exit:
                     {
-                        return new ExitMessage();
+                        return new ExitMessage() { MsgId = this.MsgId }; 
                     }
                 case AbonentsCommandType.ExitRoom:
                     {
-                        return new ExitRoomMessage();
+                        return new ExitRoomMessage() { MsgId = this.MsgId }; 
                     }
                 case AbonentsCommandType.JoinRoom:
                     {
-                        DataContractSerializer serializer = new DataContractSerializer(typeof(JoinRoomMessage));
-                        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(Message)))
-                        {
-                            JoinRoomMessage msg = (JoinRoomMessage)serializer.ReadObject(stream);
-                            return msg;
-                        }
+                        JoinRoomMessage msg = new JoinRoomMessage();
+                        msg.UTFDeSerialize(this.Message);
+                        return msg;
                     }
                 case AbonentsCommandType.CreateRoom:
                     {
-                        DataContractSerializer serializer = new DataContractSerializer(typeof(CreateRoomMessage));
-                        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(Message)))
-                        {
-                            CreateRoomMessage msg = (CreateRoomMessage)serializer.ReadObject(stream);
-                            return msg;
-                        }
+                        CreateRoomMessage msg = new CreateRoomMessage();
+                        msg.UTFDeSerialize(this.Message);
+                        return msg;
                     }
                 case AbonentsCommandType.RequestRoomInfo:
                     {
-                        return new RequestRoomInfoMessage();
+                        return new RequestRoomInfoMessage() { MsgId = this.MsgId }; 
                     }
                 case AbonentsCommandType.StartRoom:
                     {
-                        return new StartRoomMessage();
+                        return new StartRoomMessage() { MsgId = this.MsgId }; 
                     }
                     case AbonentsCommandType.KickUser:
                     {
                         DataContractSerializer serializer = new DataContractSerializer(typeof(KickUserMessage));
                         using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(Message)))
                         {
-                            KickUserMessage msg = (KickUserMessage)serializer.ReadObject(stream);
+                            KickUserMessage msg = (KickUserMessage)serializer.ReadObject(stream); 
                             return msg;
                         }
                     }
 
             }
             return null;
+        }
+
+        protected override void CopyMessageField(BaseMessage msg)
+        {
+            AbonentsCommandMessage copymsg = (AbonentsCommandMessage)msg;
+            this.Message = copymsg.Message;
+            this.Type = copymsg.Type;
+        }
+
+        protected override TransportContainer TKCreation(string text)
+        {
+            var msg = new TransportContainer() { Message = text, Type = TCTypes.AbonentCommand, MsgId = this.MsgId };
+            return msg;
         }
     }
 }
