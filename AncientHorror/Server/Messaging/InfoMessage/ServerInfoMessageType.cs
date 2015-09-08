@@ -8,6 +8,8 @@ namespace AncientHorror.Server.Messaging.InfoMessage
 {
     public enum ServerInfoMessageType
     {
-        Abonents
+        Abonents,
+        Rooms,
+        Error
     }
 }

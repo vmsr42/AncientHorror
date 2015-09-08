@@ -1,9 +1,12 @@
-﻿using System;
+﻿using AncientHorror.Server.Messaging;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace AncientHorror.Server
 {
@@ -15,5 +18,15 @@ namespace AncientHorror.Server
         public byte[] buffer = new byte[4096];
         public StringBuilder sb = new StringBuilder();
         public int RoomId { get; set; }
+        public void SendMessage(ServerMessage msg)
+        {
+            
+                XmlSerializer writer = new XmlSerializer(typeof(ServerMessage));
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    writer.Serialize(ms, msg);
+                    this.Sock.Send(ms.ToArray());
+                }
+        }
     }
 }
