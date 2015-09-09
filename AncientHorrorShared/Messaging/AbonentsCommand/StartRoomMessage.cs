@@ -12,7 +12,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
     [DataContract]
     public class StartRoomMessage: BaseMessage
     {
-        public StartRoomMessage() : base(new DataContractSerializer(typeof(StartRoomMessage))) { }
+        public StartRoomMessage() : base(new DataContractSerializer(typeof(StartRoomMessage)),true) { }
         protected override TransportContainer TKCreation(string text)
         {
             var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.StartRoom, MsgId = this.MsgId };

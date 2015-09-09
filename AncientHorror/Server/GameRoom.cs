@@ -1,6 +1,7 @@
 ﻿using AncientHorrorShared;
 using AncientHorrorShared.Messaging.AbonentsCommand;
 using AncientHorrorShared.Messaging.InfoMessage;
+using AncientHorrorShared.Messaging.ConfirmMessage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +33,25 @@ namespace AncientHorror.Server
             {
                 case AbonentsCommandType.ExitRoom:
                     {
+                        bool done = false;
+
                         if (this.RemoveAbonent(ab))
+                        {
                             Program.Lobby.AddAbonent(ab);
                             if (ab.Gamer.Id == this.Owner.Id)
                             {
                                 AfterRemoveOwner();
                             }
-                        else
+                            done = true;
+                        }
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
+                        }
+                        if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось покинуть комнату...мухаха" };
                             var smsg = error.GetTC();
@@ -56,16 +69,35 @@ namespace AncientHorror.Server
                     }
                 case AbonentsCommandType.StartRoom:
                     {
+                        bool done = false;
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
+                        }
                         break;
                     }
                 case AbonentsCommandType.KickUser:
                     {
+                        bool done = false;
                         KickUserMessage kickmsg = (KickUserMessage)acMsg.GetInnerMessage();
                         Abonent kickedab = this.abntsList.FirstOrDefault(a => a.Gamer.Id==kickmsg.UserId);
                         if (kickedab!=null)
                         {
                             if (this.RemoveAbonent(kickedab))
+                            {
                                 Program.Lobby.AddAbonent(kickedab);
+                                done = true;
+                            }
+                        }
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
                         }
                         break;
                     }

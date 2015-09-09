@@ -14,9 +14,12 @@ namespace AncientHorrorShared.Messaging
         private DataContractSerializer serializer;
         [DataMember]
         public Guid MsgId { get; set; }
-        public BaseMessage(DataContractSerializer ser)
+        public Boolean NeedConfirm { get; private set; }
+        public BaseMessage(DataContractSerializer ser, bool needConf)
         {
+            MsgId = Guid.NewGuid();
             serializer = ser;
+            NeedConfirm = needConf;
         }
         public TransportContainer GetTC()
         {

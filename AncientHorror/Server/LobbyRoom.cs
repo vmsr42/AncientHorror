@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AncientHorrorShared.Messaging.AbonentsCommand;
 using AncientHorrorShared.Messaging.InfoMessage;
 using AncientHorrorShared;
+using AncientHorrorShared.Messaging.ConfirmMessage;
 namespace AncientHorror.Server
 {
     public class LobbyRoom: Room
@@ -22,14 +23,34 @@ namespace AncientHorror.Server
             {
                 case AbonentsCommandType.Authorization:
                     {
+                        bool done = false;
                         AuthorizationMessage amsg = (AuthorizationMessage)acMsg.GetInnerMessage();
+                        //реализация логики авторизации пока пусть будет типа авторизован
+                        done = true;
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
+                        }
                         break;
                     }
                 case AbonentsCommandType.UnAuthorization:
                     {
+                        bool done = false; ;
+
                         ab.Gamer.Name = "Guest" + ab.Gamer.Id;
                         ab.Gamer.UserId = 0;
                         ab.Status = AbonentStatusEnum.Guest;
+                        done = true;
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
+                        }
                         break;
                     }
                 case AbonentsCommandType.Exit:
@@ -41,38 +62,58 @@ namespace AncientHorror.Server
                     }
                 case AbonentsCommandType.CreateRoom:
                     {
+                        bool done = false;
                         CreateRoomMessage crmsg = (CreateRoomMessage)acMsg.GetInnerMessage();
-                        GameRoom room = new GameRoom(roomnumber, crmsg.Name, crmsg.Password, ab.Gamer);
+                        GameRoom room = new GameRoom(roomnumber, crmsg.Name, crmsg.Password, ab.Gamer);                     
                         if (room.AddAbonent(ab))
                         {
                             this.RemoveAbonent(ab);
                             Program.Rooms.Add(room);
+                            done = true;
                         }
-                        else
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
+                        }
+                        if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось создать комнату" };
                             var smsg = error.GetTC();
                             smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
-                        
+
                         break;
                     }
                 case AbonentsCommandType.JoinRoom:
                     {
+                        bool done = false;
                         JoinRoomMessage jrmsg = (JoinRoomMessage)acMsg.GetInnerMessage();
                         if (jrmsg.RoomId > 0)
                         {
                             GameRoom room = (GameRoom)Program.Rooms.FirstOrDefault(r => r.Id == jrmsg.RoomId);
                             if (room.AddAbonent(ab, jrmsg.Password))
-                                this.RemoveAbonent(ab);
-                            else
                             {
-                                ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось подключиться к комнате" };
-                                var smsg = error.GetTC();
-                                smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
-                                ab.SendMessage(smsg);
+                                this.RemoveAbonent(ab);
+                                done = true;
                             }
+                        }
+                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        {
+                            ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
+                            var smsg = confirm.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
+                        }
+                        if (!done)
+                        {
+                            ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось подключиться к комнате" };
+                            var smsg = error.GetTC();
+                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
+                            ab.SendMessage(smsg);
                         }
                         break;
                     }

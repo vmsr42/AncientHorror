@@ -13,7 +13,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
     public class ExitMessage: BaseMessage
     {
 
-        public ExitMessage() : base(new DataContractSerializer(typeof(ExitMessage))) { }
+        public ExitMessage() : base(new DataContractSerializer(typeof(ExitMessage)), false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.Exit, MsgId = this.MsgId };

@@ -18,7 +18,7 @@ namespace AncientHorrorShared.Messaging.InfoMessage
         public List<String> RoomNames { get; set; }
         [DataMember]
         public List<GameAbonent> Owners { get; set; }
-        public ServerInfoRoomsMessage() : base(new DataContractSerializer(typeof(ServerInfoRoomsMessage))) { }
+        public ServerInfoRoomsMessage() : base(new DataContractSerializer(typeof(ServerInfoRoomsMessage)),false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Rooms, MsgId = this.MsgId };

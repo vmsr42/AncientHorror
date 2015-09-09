@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace AncientHorrorShared.Messaging
 {
@@ -20,7 +19,7 @@ namespace AncientHorrorShared.Messaging
         public String Message { get; set; }
         [DataMember]
         public GameAbonent Sender { get; set; }
-        public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer))) { }
+        public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer)),false) { }
         public override BaseMessage GetInnerMessage()
         {
             switch (Type)

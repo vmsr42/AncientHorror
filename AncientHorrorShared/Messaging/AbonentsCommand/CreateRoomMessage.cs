@@ -16,7 +16,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
         public String Name { get; set; }
         [DataMember]
         public string Password { get; set; }
-        public CreateRoomMessage() : base(new DataContractSerializer(typeof(CreateRoomMessage))) { }
+        public CreateRoomMessage() : base(new DataContractSerializer(typeof(CreateRoomMessage)), true) { }
         protected override TransportContainer TKCreation(string text)
         {
             var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.CreateRoom, MsgId = this.MsgId };

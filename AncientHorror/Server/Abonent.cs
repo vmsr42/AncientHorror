@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace AncientHorror.Server
 {
@@ -21,11 +21,11 @@ namespace AncientHorror.Server
         public int RoomId { get; set; }
         public void SendMessage(TransportContainer msg)
         {
-            
-                XmlSerializer writer = new XmlSerializer(typeof(TransportContainer));
+
+            DataContractSerializer writer = new DataContractSerializer(typeof(TransportContainer));
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    writer.Serialize(ms, msg);
+                    writer.WriteObject(ms, msg);
                     this.Sock.Send(ms.ToArray());
                 }
         }

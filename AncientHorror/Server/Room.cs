@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace AncientHorror.Server
 {
@@ -59,10 +59,10 @@ namespace AncientHorror.Server
         {
             foreach (var abn in abntsList)
             {
-                XmlSerializer writer = new XmlSerializer(typeof(TransportContainer));
+                DataContractSerializer writer = new DataContractSerializer(typeof(TransportContainer));
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    writer.Serialize(ms, msg);
+                    writer.WriteObject(ms, msg);
                     abn.Sock.Send(ms.ToArray());
                 }
             }
@@ -98,8 +98,8 @@ namespace AncientHorror.Server
                 {
                     using (MemoryStream ms = new MemoryStream(ab.buffer))
                     {
-                        XmlSerializer reader = new XmlSerializer(typeof(TransportContainer));
-                        TransportContainer msg = (TransportContainer)reader.Deserialize(ms);
+                        DataContractSerializer reader = new DataContractSerializer(typeof(TransportContainer));
+                        TransportContainer msg = (TransportContainer)reader.ReadObject(ms);
                         switch(msg.Type)
                         { 
                             case TCTypes.AbonentCommand:
