@@ -79,6 +79,7 @@ namespace AncientHorrorClient.Network
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(TransportContainer));
                     var tc = msg.GetTC();
+                    tc.User = Abonent;
                     using (var ms = new MemoryStream())
                     {
                         serializer.WriteObject(ms, tc);
@@ -210,7 +211,7 @@ namespace AncientHorrorClient.Network
         private void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             TransportContainer tc = (TransportContainer)e.UserState;
-            this.Abonent = tc.Sender;
+            this.Abonent = tc.User;
             switch(tc.Type)
             {
                 case TCTypes.Confirm:
