@@ -16,7 +16,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
         public AbonentsCommandType Type { get; set; }
         [DataMember]
         public String Message { get; set; }
-        public AbonentsCommandMessage() : base(new DataContractSerializer(typeof(AbonentsCommandMessage))) { }
+        public AbonentsCommandMessage() : base(new DataContractSerializer(typeof(AbonentsCommandMessage)), true) { }
         public override BaseMessage GetInnerMessage()
         {
             switch (Type)

@@ -16,7 +16,7 @@ namespace AncientHorrorShared.Messaging.InfoMessage
         public SIMessageType Type { get; set; }
         [DataMember]
         public String Message { get; set; }
-        public ServerInfoMessage() : base(new DataContractSerializer(typeof(ServerInfoMessage))) { }
+        public ServerInfoMessage() : base(new DataContractSerializer(typeof(ServerInfoMessage)),false) { }
 
         public override BaseMessage GetInnerMessage()
         {

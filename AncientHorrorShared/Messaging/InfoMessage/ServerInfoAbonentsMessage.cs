@@ -14,7 +14,7 @@ namespace AncientHorrorShared.Messaging.InfoMessage
     {
         [DataMember]
         public List<GameAbonent> Abonents { get; set; }
-        public ServerInfoAbonentsMessage() : base(new DataContractSerializer(typeof(ServerInfoAbonentsMessage))) { }
+        public ServerInfoAbonentsMessage() : base(new DataContractSerializer(typeof(ServerInfoAbonentsMessage)),false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Abonents, MsgId = this.MsgId };

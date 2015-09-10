@@ -9,6 +9,7 @@ namespace AncientHorrorShared.Messaging
     public enum TCTypes
     {
         Info,
-        AbonentCommand
+        AbonentCommand,
+        Confirm
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="Messaging\AbonentsCommand\UnAuthorizationMessage.cs" />
     <Compile Include="Messaging\BaseMessage.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoAbonentsMessage.cs" />
+    <Compile Include="Messaging\ConfirmMessage\ServerConfirmMessage.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoErrorMessage.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoMessage.cs" />
     <Compile Include="Messaging\InfoMessage\SIMessageType.cs" />

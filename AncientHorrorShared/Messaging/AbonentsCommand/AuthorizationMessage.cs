@@ -18,7 +18,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
         public String Password { get; set; }
 
 
-        public AuthorizationMessage() : base(new DataContractSerializer(typeof(AuthorizationMessage))) { }
+        public AuthorizationMessage() : base(new DataContractSerializer(typeof(AuthorizationMessage)),true) { }
         protected override TransportContainer TKCreation(string text)
         {
             var simmsg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.Authorization, MsgId = this.MsgId };
