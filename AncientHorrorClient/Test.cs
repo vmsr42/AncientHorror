@@ -12,7 +12,7 @@ namespace AncientHorrorClient
         void CreateAuthMessage()
         {
             AuthorizationMessage msg = new AuthorizationMessage();
-            //в сслыках не было указано ссылка на проект либы AncientHorrorShared который
+            //в сслыках не было указано ссылка на проект либы AncientHorrorShared который тест
         }
     }
 }

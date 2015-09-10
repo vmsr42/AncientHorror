@@ -42,7 +42,6 @@ namespace AncientHorror.Server
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось покинуть комнату...мухаха" };
                             var smsg = error.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         break;

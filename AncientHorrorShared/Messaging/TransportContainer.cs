@@ -19,7 +19,7 @@ namespace AncientHorrorShared.Messaging
         [DataMember]
         public String Message { get; set; }
         [DataMember]
-        public GameAbonent Sender { get; set; }
+        public GameAbonent User { get; set; }
         public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer))) { }
         public override BaseMessage GetInnerMessage()
         {
@@ -47,13 +47,13 @@ namespace AncientHorrorShared.Messaging
             TransportContainer copymsg = (TransportContainer)msg;
             this.Message = copymsg.Message;
             this.Type = copymsg.Type;
-            this.Sender = copymsg.Sender;
+            this.User = copymsg.User;
             this.MsgId = this.MsgId;
         }
 
         protected override TransportContainer TKCreation(string text)
         {
-            return new TransportContainer() { Message = this.Message, Sender = this.Sender, MsgId = this.MsgId, Type = this.Type };
+            return new TransportContainer() { Message = this.Message, User = this.User, MsgId = this.MsgId, Type = this.Type };
         }
     }
 }

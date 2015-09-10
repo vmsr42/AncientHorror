@@ -60,6 +60,7 @@ namespace AncientHorror.Server
             foreach (var abn in abntsList)
             {
                 XmlSerializer writer = new XmlSerializer(typeof(TransportContainer));
+                msg.User = abn.Gamer;
                 using (MemoryStream ms = new MemoryStream())
                 {
                     writer.Serialize(ms, msg);
@@ -78,7 +79,6 @@ namespace AncientHorror.Server
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
                 var smsg = msg.GetTC();
-                smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                 this.SendMessage(smsg);
                 ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
                 return true;
@@ -146,7 +146,6 @@ namespace AncientHorror.Server
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
                 var smsg = msg.GetTC();
-                smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                 this.SendMessage(smsg);
                 return true;
             }

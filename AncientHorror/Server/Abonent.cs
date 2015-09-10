@@ -21,7 +21,7 @@ namespace AncientHorror.Server
         public int RoomId { get; set; }
         public void SendMessage(TransportContainer msg)
         {
-            
+            msg.User = this.Gamer;
                 XmlSerializer writer = new XmlSerializer(typeof(TransportContainer));
                 using (MemoryStream ms = new MemoryStream())
                 {
