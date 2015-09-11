@@ -17,8 +17,9 @@ namespace AncientHorrorShared.Messaging
         public TCTypes Type { get; set; }
         [DataMember]
         public String Message { get; set; }
-        [DataMember]
+        
         public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer)),false) { }
+        [DataMember]
         public GameAbonent User { get; set; }
         public override BaseMessage GetInnerMessage()
         {

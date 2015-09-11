@@ -48,7 +48,6 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         if (!done)
@@ -73,7 +72,6 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         break;
@@ -95,7 +93,6 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         break;
