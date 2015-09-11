@@ -23,6 +23,7 @@ namespace AncientHorror.Server
         {
 
             DataContractSerializer writer = new DataContractSerializer(typeof(TransportContainer));
+            msg.User = this.Gamer;
                 using (MemoryStream ms = new MemoryStream())
                 {
                     writer.WriteObject(ms, msg);

@@ -13,5 +13,16 @@ namespace AncientHorrorClient
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            Global.NetworkClient.Disconnected+=NetworkClient_Disconnected;
+        }
+
+        private void NetworkClient_Disconnected()
+        {
+            Global.CurrentWindow.Close();
+            var wind = new ConnectWindow();
+            wind.Show();
+        }
     }
 }

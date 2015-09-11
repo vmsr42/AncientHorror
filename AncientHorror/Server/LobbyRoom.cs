@@ -31,7 +31,6 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         break;
@@ -48,7 +47,6 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         break;
@@ -75,14 +73,12 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось создать комнату" };
                             var smsg = error.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
 
@@ -105,14 +101,12 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось подключиться к комнате" };
                             var smsg = error.GetTC();
-                            smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                             ab.SendMessage(smsg);
                         }
                         break;
@@ -128,7 +122,6 @@ namespace AncientHorror.Server
                                 riMessage.Owners.Add(room.Owner);
                             }
                         var smsg = riMessage.GetTC();
-                        smsg.Sender = new GameAbonent() { Id = -1, Name = "Server" };
                         ab.SendMessage(smsg);
                         break;
                     }

@@ -18,11 +18,12 @@ namespace AncientHorrorClient
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class RoomWindow : Window
     {
-        public MainWindow()
+        public RoomWindow()
         {
             InitializeComponent();
+            Global.CurrentWindow = this;
         }
     }
 }

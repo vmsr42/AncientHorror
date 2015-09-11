@@ -18,6 +18,16 @@ namespace AncientHorrorClient.Network
 {
     public class AHNetworkClient
     {
+        public delegate void disconnectDelegate();
+        public event disconnectDelegate Disconnected;
+        private void OnDisconnected()
+        {
+            var handler = Disconnected;
+            if (handler != null)
+            {
+                handler();
+            }
+        }
         private Socket client;
         private BackgroundWorker bWorker = new BackgroundWorker();
         private GameAbonent abon = new GameAbonent();
@@ -58,7 +68,7 @@ namespace AncientHorrorClient.Network
         public event RoomsMsgDelegate RoomsMessageRecieved;
         private ConcurrentBag<TimedConfirmMessage> ConfirmList = new ConcurrentBag<TimedConfirmMessage>();
         private int timeout = 2;
-        public bool connected = false;
+        private bool connected = false;
         public bool IsConnected
         {
             get
@@ -79,6 +89,7 @@ namespace AncientHorrorClient.Network
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(TransportContainer));
                     var tc = msg.GetTC();
+                    tc.User = Abonent;
                     using (var ms = new MemoryStream())
                     {
                         serializer.WriteObject(ms, tc);
@@ -180,6 +191,7 @@ namespace AncientHorrorClient.Network
                 client.Dispose();
             }            
             client = null;
+            OnDisconnected();
         }
 
         private void bWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -210,7 +222,7 @@ namespace AncientHorrorClient.Network
         private void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             TransportContainer tc = (TransportContainer)e.UserState;
-            this.Abonent = tc.Sender;
+            this.Abonent = tc.User;
             switch(tc.Type)
             {
                 case TCTypes.Confirm:
