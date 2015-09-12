@@ -46,22 +46,9 @@ namespace StartRoom
             TabItem2.IsSelected = true;
             TabItem1.IsEnabled = false;
 
-            if (Account.YouAreLeader)
-            {
-                ListBox2.Items.Add(Account.AccountName + " создала новую комнату");
-            }
+            ListBox2.Items.Add(Account.AccountName + " создала новую комнату");
 
-            // спросить Мишу как вынимать список ЛистВох4 (коллекция??)
-            // чтоб можно было его куда сохранить например
-
-            ListBox4.Items.Add(Account.AccountName); //ввести ограничение но не сюда, на кнопку "войти в комнату"
-            ListBox4.Items.Add("Dasha"); // test
-            ListBox4.Items.Add("Masha"); // test
-            ListBox4.Items.Add("Ksusha"); // test
-            ListBox4.Items.Add("Nusha"); // test
-            ListBox4.Items.Add("Asha"); // test
-            ListBox4.Items.Add("Usha"); // test
-            ListBox4.Items.Add("Lusha"); // test
+            ListBox4.Items.Add(Account.AccountName);
 
             TextBox3.Text = ListBox4.Items.Count + " / 8";
 
@@ -87,9 +74,8 @@ namespace StartRoom
             {
                 TabItem2.IsEnabled = true;
                 TabItem2.IsSelected = true;
-                TabItem1.IsEnabled = false;
+                //TabItem1.IsEnabled = false;
                 Button4.Visibility = Visibility.Hidden;
-
 
                 ListBox2.Items.Add(Account.AccountName + " зашла в комнату");
 
@@ -99,10 +85,47 @@ namespace StartRoom
                 }
 
                 TextBox3.Text = ListBox4.Items.Count + " / 8";
+
+                ListBox3.Items.Remove(
+                    "Комната № " + ListBox3.Items.Count + " " + Help(string.Empty)[0] + " "
+                    + (ListBox4.Items.Count - 1) + " / 8");
+
+                ListBox3.Items.Add(
+                    "Комната № " + (ListBox3.Items.Count + 1) + " " + Help(string.Empty)[0] + " " + ListBox4.Items.Count
+                    + " / 8");
             }
             else
             {
-                Button3.IsEnabled = false;
+                MessageBox.Show("В этой комнате нет места. Попробуйте выбрать другую комнату или создать свою.");
+            }
+        }
+
+        private void Button5Click(object sender, RoutedEventArgs e) // выйти из комнаты
+        {
+            // TabItem2.IsEnabled = false;
+            TabItem1.IsSelected = true;
+            TabItem1.IsEnabled = true;
+            Button4.Visibility = Visibility.Visible;
+
+            ListBox2.Items.Add(Account.AccountName + " вышла из комнаты");
+
+            if (Account.YouAreLeader)
+            {
+                Account.YouAreLeader = false;
+
+                ListBox3.Items.Remove("Комната № " + ListBox3.Items.Count + " " + Account.AccountName + " "
+                    + ListBox4.Items.Count + " / 8");
+                ListBox4.Items.Clear();
+                TextBox3.Clear();
+            }
+            else
+            {
+                ListBox3.Items.Remove(
+                    "Комната № " + ListBox3.Items.Count + " " + Help(string.Empty)[0] + " "
+                    + (Help(string.Empty).Count + 1) + " / 8");
+                AddRoom(Help(string.Empty));
+                ListBox4.Items.Clear();
+                TextBox3.Clear();
             }
         }
 
@@ -116,7 +139,8 @@ namespace StartRoom
             irishaRoom.Add("Natasha");
             irishaRoom.Add("Yniasha");
             irishaRoom.Add("Katusha");
-         //   irishaRoom.Add("Arisha");
+            // irishaRoom.Add("Arisha");
+            
             if (accountName != string.Empty & irishaRoom.Count < 8)
             {
                 irishaRoom.Add(accountName);
@@ -129,27 +153,6 @@ namespace StartRoom
         {
             ListBox3.Items.Add("Комната № " + (ListBox3.Items.Count + 1) + " " + name[0] + " "
         + name.Count + " / 8");
-        }
-
-        private void Button5Click(object sender, RoutedEventArgs e)
-        {
-            ListBox2.Items.Add(Account.AccountName + " вышла из комнаты");
-
-            if (Account.YouAreLeader)
-            {
-               // TabItem2.IsEnabled = false;
-                TabItem1.IsSelected = true;
-                TabItem1.IsEnabled = true;
-
-                ListBox4.Items.Clear();
-
-                ListBox3.Items.Remove("Комната № " + (ListBox3.Items.Count + 1) + " " + Account.AccountName + " " + ListBox4.Items.Count + " / 8");
- 
-                // поудалять все что насоздавала
-            }
-
-
-
         }
     }
 }

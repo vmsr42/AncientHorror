@@ -3,16 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Hall" Height="366" Width="589">
     <Grid>
-        <Button Content="Обновить" HorizontalAlignment="Left" Margin="469,11,0,0" VerticalAlignment="Top" Width="75"/>
         <TextBox x:Name ="TextBox1" HorizontalAlignment="Left" Height="36" Margin="11,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="222"/>
         <Button x:Name ="Button1" Content="Отправить" HorizontalAlignment="Left" Margin="257,304,0,0" VerticalAlignment="Top" Width="75" Click="Button1Click"/>
-        <Label Content="Игроки" HorizontalAlignment="Left" Margin="483,55,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.039,0.346"/>
-        <ListBox x:Name="ListBox1" HorizontalAlignment="Left" Height="94" Margin="10,173,0,0" VerticalAlignment="Top" Width="222" IsEnabled="False"/>
-        <ListBox x:Name="ListBox2" HorizontalAlignment="Left" Height="170" Margin="469,86,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label Content="Игроки" HorizontalAlignment="Left" Margin="480,22,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.039,0.346"/>
+        <ListBox x:Name="ListBox1" HorizontalAlignment="Left" Height="94" Margin="10,173,0,0" VerticalAlignment="Top" Width="322" IsEnabled="False"/>
+        <ListBox x:Name="ListBox2" HorizontalAlignment="Left" Height="203" Margin="452,53,0,0" VerticalAlignment="Top" Width="108"/>
         <TabControl HorizontalAlignment="Left" Height="150" Margin="10,10,0,0" VerticalAlignment="Top" Width="414">
             <TabItem x:Name="TabItem1" Header="Выбор комнаты">
                 <Grid Margin="0,2,-3,-2">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid Background="#FFE5E5E5" HorizontalAlignment="Left" Width="407">
                         <Button x:Name="Button2" Content="Создать комнату" HorizontalAlignment="Left" Margin="322,13,0,0" VerticalAlignment="Top" Width="75" Click="Button2Click" RenderTransformOrigin="-1.011,6.247"/>
                         <Button x:Name="Button3" Content="Войти в комнату" HorizontalAlignment="Left" Margin="322,79,0,0" VerticalAlignment="Top" Width="75" Click="Button3Click"/>
                         <ListBox x:Name="ListBox3" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="297" Margin="9,10,0,0"/>
