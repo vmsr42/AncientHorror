@@ -13,6 +13,7 @@ using System.Runtime.Serialization;
 using AncientHorrorShared.Messaging.InfoMessage;
 using AncientHorrorShared.Messaging.ConfirmMessage;
 using System.Threading;
+using AncientHorrorShared.Messaging.AbonentsCommand;
 
 namespace AncientHorrorClient.Network
 {
@@ -80,21 +81,19 @@ namespace AncientHorrorClient.Network
         {
             timeout = waitingtime;
         }
-        public async Task<bool> SendMessage(BaseMessage msg)
+        public async Task<ClientAnswer> SendMessage(BaseMessage msg)
         {
+            string errmsg = String.Empty;
             bool res = false;
             if (IsConnected)
             {
                 try
                 {
-                    DataContractSerializer serializer = new DataContractSerializer(typeof(TransportContainer));
                     var tc = msg.GetTC();
                     tc.User = Abonent;
-                    using (var ms = new MemoryStream())
-                    {
-                        serializer.WriteObject(ms, tc);
-                        client.Send(ms.ToArray());
-                    }
+                    string utf8 = tc.UTFSerialize();
+                    byte[] data = Encoding.UTF8.GetBytes(utf8);
+                    client.Send(data);
                     if (msg.NeedConfirm)
                     {
                         res = await Task.Run<bool>(() =>
@@ -110,7 +109,7 @@ namespace AncientHorrorClient.Network
                 {
                 }
             }
-            return res;
+            return new ClientAnswer() { Message=errmsg, Result=res };
 
         }
         private bool FindMessageByRefWithClearingOverdue(Guid refId, out bool result)
@@ -156,59 +155,68 @@ namespace AncientHorrorClient.Network
             }
             return answer;
         }
-        public bool ConnectToServer(string ip, int port,out String error)
+        public async Task<ClientAnswer> ConnectToServer(string login, string password)
         {
-            error = String.Empty;
             try
             {
-                var cl = new TcpClient(ip, port);
+                var cl = new TcpClient(Global.servLink, Global.servPort);
                 cl.ReceiveTimeout = timeout * 1000;
                 client = cl.Client;
                 connected = true;
             }
             catch(Exception ex)
             {
-                error = "Не удалось соединиться с сервером по причине: " + ex.Message;
-                return false;
+                return new ClientAnswer() { Result=false, Message="Ну удалось подключиться к серверу по причине: "+ex.Message };
             }
             bWorker.DoWork += bWorker_DoWork;
             bWorker.ProgressChanged += bWorker_ProgressChanged;
             bWorker.WorkerReportsProgress = true;
             bWorker.RunWorkerAsync();
-            return true;
-        }
-        public void Disconnect()
-        {
-            connected = false;
-            bWorker.DoWork -= bWorker_DoWork;
-            bWorker.ProgressChanged -= bWorker_ProgressChanged;
-            try
+            Thread.Sleep(10000);
+            var answ = await this.SendMessage(new AuthorizationMessage() { Login = login, Password = password });
+            string msg = String.Empty;
+            if (!answ.Result)
             {
-                client.Disconnect(false);
+                this.Disconnect();
+                answ.Message = "Неправильный логин или пароль";
             }
-            finally
+            return answ;
+        }
+        public async void Disconnect()
+        {
+            if (IsConnected)
             {
-                client.Dispose();
-            }            
-            client = null;
-            OnDisconnected();
+                await this.SendMessage(new ExitMessage());
+                connected = false;
+                bWorker.DoWork -= bWorker_DoWork;
+                bWorker.ProgressChanged -= bWorker_ProgressChanged;
+                try
+                {
+                    client.Disconnect(false);
+                }
+                finally
+                {
+                    client.Dispose();
+                }
+                client = null;
+                OnDisconnected();
+            }
         }
 
         private void bWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (this.IsConnected == true)
             {
+                byte[] buffer = new byte[4096];
                 try
                 {
-                    byte[] buffer = new byte[4096];
 
                     client.Receive(buffer);
-                    using (MemoryStream ms = new MemoryStream(buffer))
-                    {
-                        DataContractSerializer reader = new DataContractSerializer(typeof(TransportContainer));
-                        var msg = (TransportContainer)reader.ReadObject(ms);
-                        bWorker.ReportProgress(0, msg);
-                    }
+                    
+                    string utf8 = Encoding.UTF8.GetString(buffer);
+                    TransportContainer msg = new TransportContainer();
+                    msg.UTFDeSerialize(utf8);
+                    bWorker.ReportProgress(0, msg);
 
                 }
                     //Добавить обнаружение дисконекта

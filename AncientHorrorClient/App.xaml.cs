@@ -20,9 +20,12 @@ namespace AncientHorrorClient
 
         private void NetworkClient_Disconnected()
         {
-            Global.CurrentWindow.Close();
-            var wind = new ConnectWindow();
-            wind.Show();
+            if (!Global.CurrentWindow.IsMain)
+            {
+                Global.CurrentWindow.CloseWindow();
+                var wind = new ConnectWindow();
+            }
+
         }
     }
 }

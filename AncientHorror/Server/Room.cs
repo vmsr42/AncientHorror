@@ -62,28 +62,36 @@ namespace AncientHorror.Server
                 DataContractSerializer writer = new DataContractSerializer(typeof(TransportContainer));
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    writer.WriteObject(ms, msg);
+                    var data = Encoding.UTF8.GetBytes(msg.UTFSerialize());
+                    ms.Write(data, 0, data.Length);
                     abn.Sock.Send(ms.ToArray());
                 }
             }
         }
         public bool AddAbonent(Abonent ab)
         {
-            if (ab.Status != AbonentStatusEnum.Authorized)
-                return false;
-            if (CanAddAbonent)
+            try
             {
-                abntsList.Add(ab);
-                var msg = new ServerInfoAbonentsMessage() { };
-                foreach (var abon in abntsList)
-                    msg.Abonents.Add(abon.Gamer);
-                var smsg = msg.GetTC();
-                this.SendMessage(smsg);
-                ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
-                return true;
+                if (ab.Status != AbonentStatusEnum.Authorized && Id != 0)
+                    return false;
+                if (CanAddAbonent)
+                {
+                    abntsList.Add(ab);
+                    var msg = new ServerInfoAbonentsMessage() { Abonents= new List<GameAbonent>() };
+                    foreach (var abon in abntsList)
+                        msg.Abonents.Add(abon.Gamer);
+                    var smsg = msg.GetTC();
+                    this.SendMessage(smsg);
+                    ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
+                    return true;
+                }
+                else
+                    return false;
             }
-            else
+            catch(Exception ex)
+            {
                 return false;
+            }
 
         }
 
@@ -95,23 +103,31 @@ namespace AncientHorror.Server
                 ab.Sock.EndReceive(ar);
                 if (ab.Status != AbonentStatusEnum.Disconnected)
                 {
-                    using (MemoryStream ms = new MemoryStream(ab.buffer))
                     {
-                        DataContractSerializer reader = new DataContractSerializer(typeof(TransportContainer));
-                        TransportContainer msg = (TransportContainer)reader.ReadObject(ms);
-                        switch(msg.Type)
-                        { 
-                            case TCTypes.AbonentCommand:
-                                {
-                                    AbonentsCommandMessage acmsg = (AbonentsCommandMessage)msg.GetInnerMessage();
-                                    AfterRecieveCommand(acmsg, ab);
-                                    break;
-                                }
-                        }
-                        if (abntsList.Contains(ab))
+                        try
                         {
-                            ab.Sock.BeginReceive(ab.buffer, 0, 4096, 0, new AsyncCallback(AfterRecieve), ab);
+                            string utf8 = Encoding.UTF8.GetString(ab.buffer);
+                            TransportContainer msg = new TransportContainer();
+                            msg.UTFDeSerialize(utf8);
+                            switch (msg.Type)
+                            {
+                                case TCTypes.AbonentCommand:
+                                    {
+                                        AbonentsCommandMessage acmsg = (AbonentsCommandMessage)msg.GetInnerMessage();
+                                        AfterRecieveCommand(acmsg, ab);
+                                        break;
+                                    }
+                            }
+                            if (abntsList.Contains(ab))
+                            {
+
+                            }
                         }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        ab.Sock.BeginReceive(ab.buffer, 0, 4096, 0, new AsyncCallback(AfterRecieve), ab);
                     }
                 }
             }

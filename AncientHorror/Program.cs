@@ -30,6 +30,8 @@ namespace AncientHorror
                     var rm = Rooms.Where(r => r.Id == 0).FirstOrDefault();
                     if (rm != null)
                         lroom = (LobbyRoom)rm;
+                    else
+                        lroom = new LobbyRoom();
                 }
                 return lroom;
 
@@ -61,12 +63,19 @@ namespace AncientHorror
 
         private static void Listen_Callback(IAsyncResult ar)
         {
-            Socket servSock = (Socket)ar.AsyncState;
-            Socket clientSock = servSock.EndAccept(ar);
-            Abonent ab = new Abonent() { Status = AbonentStatusEnum.Guest, Gamer = new GameAbonent() { Name = "Guest" + number, Id=number }, Sock = clientSock };
-            number++;
-            Lobby.AddAbonent(ab);
-            servSock.BeginAccept(new AsyncCallback(Listen_Callback), servSock);
+            try
+            {
+                Socket servSock = (Socket)ar.AsyncState;
+                Socket clientSock = servSock.EndAccept(ar);
+                Abonent ab = new Abonent() { Status = AbonentStatusEnum.Guest, Gamer = new GameAbonent() { Name = "Guest" + number, Id = number }, Sock = clientSock };
+                number++;
+                Lobby.AddAbonent(ab);
+                servSock.BeginAccept(new AsyncCallback(Listen_Callback), servSock);
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
 

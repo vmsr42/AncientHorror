@@ -18,12 +18,16 @@ namespace AncientHorrorClient
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class RoomWindow : Window
+    public partial class RoomWindow : BaseWindow
     {
-        public RoomWindow()
+        public RoomWindow():base(false)
         {
             InitializeComponent();
-            Global.CurrentWindow = this;
+        }
+
+        public override void Dispose()
+        {
+            
         }
     }
 }

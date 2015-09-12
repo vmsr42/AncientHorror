@@ -26,8 +26,11 @@ namespace AncientHorror.Server
                         bool done = false;
                         AuthorizationMessage amsg = (AuthorizationMessage)acMsg.GetInnerMessage();
                         //реализация логики авторизации пока пусть будет типа авторизован
+                        ab.Status = AbonentStatusEnum.Authorized;
+                        ab.Gamer.Id = 1;
+                        ab.Gamer.Name = amsg.Login;
                         done = true;
-                        if (acMsg.GetInnerMessage().NeedConfirm)
+                        if (amsg.NeedConfirm)
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();

@@ -26,7 +26,8 @@ namespace AncientHorror.Server
             msg.User = this.Gamer;
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    writer.WriteObject(ms, msg);
+                    var data = Encoding.UTF8.GetBytes(msg.UTFSerialize());
+                    ms.Write(data, 0, data.Length);
                     this.Sock.Send(ms.ToArray());
                 }
         }

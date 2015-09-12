@@ -10,9 +10,9 @@ namespace AncientHorrorClient
 {
     public static class Global
     {
-        public static readonly AHNetworkClient NetworkClient = new AHNetworkClient(2);
-        public static Window CurrentWindow;
-        public static readonly String servLink = "";
-        public static readonly int servPort = 0;
+        public static readonly AHNetworkClient NetworkClient = new AHNetworkClient(20);
+        public static BaseWindow CurrentWindow;
+        public static readonly String servLink = "127.0.0.1";
+        public static readonly int servPort = 7777;
     }
 }

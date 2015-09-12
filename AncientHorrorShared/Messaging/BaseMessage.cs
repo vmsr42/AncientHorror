@@ -38,11 +38,21 @@ namespace AncientHorrorShared.Messaging
         }
         public void UTFDeSerialize(String text)
         {
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(text)))
+            //string header ="<?xml version="+'"'+"1.0"+'"'+" encoding="+'"'+"UTF-8"+'"'+"?>";
+            char[] removed = new char[1];
+            removed[0]= (char)0;
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(text.Trim(removed))))
             {
-                var copymsg = (BaseMessage)serializer.ReadObject(stream);
-                this.MsgId = copymsg.MsgId;
-                CopyMessageField(copymsg);
+                try
+                {
+                    var copymsg = (BaseMessage)serializer.ReadObject(stream);
+                    this.MsgId = copymsg.MsgId;
+                    CopyMessageField(copymsg);
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
         }
         protected abstract void CopyMessageField(BaseMessage msg);

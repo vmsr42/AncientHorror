@@ -58,11 +58,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BaseWindow.cs" />
     <Compile Include="ConnectWindow.xaml.cs">
       <DependentUpon>ConnectWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Network\AHNetworkClient.cs" />
+    <Compile Include="Network\ClientAnswer.cs" />
     <Compile Include="Network\TimedConfirmMessage.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="WaveCanvas.cs" />
@@ -121,6 +124,9 @@
       <Project>{ec414f9a-58c0-43a1-9ff6-e29e7c34a576}</Project>
       <Name>WEAncientHorrorProject</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ktulhu.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
