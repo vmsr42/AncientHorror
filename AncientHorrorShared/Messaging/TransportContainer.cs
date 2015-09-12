@@ -15,13 +15,15 @@ namespace AncientHorrorShared.Messaging
     public class TransportContainer: BaseMessage
     {
         [DataMember]
+        public GameRoomInfo Room { get; set; }
+        [DataMember]
         public TCTypes Type { get; set; }
         [DataMember]
         public String Message { get; set; }
-        
-        public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer)),false) { }
+
+        public TransportContainer() : base(new DataContractSerializer(typeof(TransportContainer)), false) { }
         [DataMember]
-        public GameAbonent User { get; set; }
+        public GameAbonentInfo User { get; set; }
         public override BaseMessage GetInnerMessage()
         {
             switch (Type)
@@ -56,6 +58,7 @@ namespace AncientHorrorShared.Messaging
             this.Type = copymsg.Type;
             this.User = copymsg.User;
             this.MsgId = this.MsgId;
+            this.Room = copymsg.Room;
         }
 
         protected override TransportContainer TKCreation(string text)

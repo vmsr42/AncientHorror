@@ -13,7 +13,7 @@ namespace AncientHorror.Server
     public class GameRoom: Room
     {
         private String password;
-        public GameRoom(int id,String name, string pass, GameAbonent owner)
+        public GameRoom(int id,String name, string pass, GameAbonentInfo owner)
             : base(8,id,name, owner)
         {
             this.password = pass;
@@ -48,13 +48,13 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось покинуть комнату...мухаха" };
                             var smsg = error.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         break;
                     }
@@ -72,7 +72,7 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         break;
                     }
@@ -93,7 +93,7 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         break;
                     }
@@ -108,6 +108,11 @@ namespace AncientHorror.Server
                 Program.Lobby.AddAbonent(remab);
             }
             Program.Rooms.Remove(this);
+        }
+
+        protected override bool HavePassword()
+        {
+            return !String.IsNullOrWhiteSpace(password);
         }
     }
 }

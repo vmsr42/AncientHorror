@@ -67,7 +67,7 @@ namespace AncientHorror
             {
                 Socket servSock = (Socket)ar.AsyncState;
                 Socket clientSock = servSock.EndAccept(ar);
-                Abonent ab = new Abonent() { Status = AbonentStatusEnum.Guest, Gamer = new GameAbonent() { Name = "Guest" + number, Id = number }, Sock = clientSock };
+                Abonent ab = new Abonent() { Status = AbonentStatusEnum.Guest, Gamer = new GameAbonentInfo() { Name = "Guest" + number, Id = number }, Sock = clientSock };
                 number++;
                 Lobby.AddAbonent(ab);
                 servSock.BeginAccept(new AsyncCallback(Listen_Callback), servSock);

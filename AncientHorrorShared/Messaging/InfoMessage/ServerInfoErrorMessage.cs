@@ -14,7 +14,7 @@ namespace AncientHorrorShared.Messaging.InfoMessage
     {
         [DataMember]
         public String Error { get; set; }
-        public ServerInfoErrorMessage() : base(new DataContractSerializer(typeof(ServerInfoErrorMessage)),false) { }
+        public ServerInfoErrorMessage() : base(new DataContractSerializer(typeof(ServerInfoErrorMessage)), false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Error, MsgId = this.MsgId };

@@ -13,12 +13,8 @@ namespace AncientHorrorShared.Messaging.InfoMessage
     public class ServerInfoRoomsMessage: BaseMessage
     {
         [DataMember]
-        public List<int> RoomIds { get; set; }
-        [DataMember]
-        public List<String> RoomNames { get; set; }
-        [DataMember]
-        public List<GameAbonent> Owners { get; set; }
-        public ServerInfoRoomsMessage() : base(new DataContractSerializer(typeof(ServerInfoRoomsMessage)),false) { }
+        public List<GameRoomInfo> Rooms { get; set; }
+        public ServerInfoRoomsMessage() : base(new DataContractSerializer(typeof(ServerInfoRoomsMessage)), false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Rooms, MsgId = this.MsgId };
@@ -27,9 +23,7 @@ namespace AncientHorrorShared.Messaging.InfoMessage
         protected override void CopyMessageField(BaseMessage msg)
         {
             ServerInfoRoomsMessage copymsg = (ServerInfoRoomsMessage)msg;
-            this.RoomIds = copymsg.RoomIds;
-            this.RoomNames = copymsg.RoomNames;
-            this.Owners = copymsg.Owners;
+            this.Rooms = copymsg.Rooms;
         }
         public override BaseMessage GetInnerMessage()
         {

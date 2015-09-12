@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 namespace AncientHorrorShared
 {
     [DataContract]
-    public class GameAbonent
+    public class GameRoomInfo
     {
         [DataMember]
         public int Id { get; set; }
-        [IgnoreDataMember]
-        public int UserId;
         [DataMember]
         public String Name { get; set; }
+        [DataMember]
+        public GameAbonentInfo Owner { get; set; }
+        [DataMember]
+        public bool HavePasswod { get; set; }
     }
 }

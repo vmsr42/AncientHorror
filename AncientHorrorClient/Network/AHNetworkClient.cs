@@ -31,8 +31,8 @@ namespace AncientHorrorClient.Network
         }
         private Socket client;
         private BackgroundWorker bWorker = new BackgroundWorker();
-        private GameAbonent abon = new GameAbonent();
-        public GameAbonent Abonent
+        private GameAbonentInfo abon = new GameAbonentInfo();
+        public GameAbonentInfo Abonent
         {
             get
             {
@@ -47,14 +47,40 @@ namespace AncientHorrorClient.Network
                 }
             }
         }
-        public delegate void AbnChgDelegate(GameAbonent ab);
+        public delegate void AbnChgDelegate(GameAbonentInfo ab);
         public event AbnChgDelegate AbonentChanged;
-        private void OnAbonentChanged(GameAbonent abn)
+        private void OnAbonentChanged(GameAbonentInfo ab)
         {
             var handler = AbonentChanged;
             if (handler != null)
             {
-                handler(abn);
+                handler(ab);
+            }
+        }
+        private GameRoomInfo room = new GameRoomInfo();
+        public GameRoomInfo Room
+        {
+            get
+            {
+                return room;
+            }
+            private set
+            {
+                if (value != room)
+                {
+                    room = value;
+                    OnRoomChanged(room);
+                }
+            }
+        }
+        public delegate void RoomChgDelegate(GameRoomInfo ab);
+        public event RoomChgDelegate RoomChanged;
+        private void OnRoomChanged(GameRoomInfo rm)
+        {
+            var handler = RoomChanged;
+            if (handler != null)
+            {
+                handler(rm);
             }
         }
         private void OnRoomsMessageRecieved(BaseMessage msg)
@@ -91,6 +117,7 @@ namespace AncientHorrorClient.Network
                 {
                     var tc = msg.GetTC();
                     tc.User = Abonent;
+                    tc.Room = Room;
                     string utf8 = tc.UTFSerialize();
                     byte[] data = Encoding.UTF8.GetBytes(utf8);
                     client.Send(data);
@@ -166,13 +193,12 @@ namespace AncientHorrorClient.Network
             }
             catch(Exception ex)
             {
-                return new ClientAnswer() { Result=false, Message="Ну удалось подключиться к серверу по причине: "+ex.Message };
+                return new ClientAnswer() { Result=false, Message="Не удалось подключиться к серверу по причине: "+ex.Message };
             }
             bWorker.DoWork += bWorker_DoWork;
             bWorker.ProgressChanged += bWorker_ProgressChanged;
             bWorker.WorkerReportsProgress = true;
             bWorker.RunWorkerAsync();
-            Thread.Sleep(10000);
             var answ = await this.SendMessage(new AuthorizationMessage() { Login = login, Password = password });
             string msg = String.Empty;
             if (!answ.Result)
@@ -231,6 +257,7 @@ namespace AncientHorrorClient.Network
         {
             TransportContainer tc = (TransportContainer)e.UserState;
             this.Abonent = tc.User;
+            this.Room = tc.Room;
             switch(tc.Type)
             {
                 case TCTypes.Confirm:

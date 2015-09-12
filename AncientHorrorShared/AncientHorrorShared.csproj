@@ -37,7 +37,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameAbonent.cs" />
+    <Compile Include="GameRoomInfo.cs" />
+    <Compile Include="GameAbonentInfo.cs" />
     <Compile Include="Messaging\AbonentsCommand\AbonentsCommandMessage.cs" />
     <Compile Include="Messaging\AbonentsCommand\AbonentsCommandType.cs" />
     <Compile Include="Messaging\AbonentsCommand\AuthorizationMessage.cs" />

@@ -12,7 +12,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
     [DataContract]
     public class UnAuthorizationMessage: BaseMessage 
     {
-        public UnAuthorizationMessage() : base(new DataContractSerializer(typeof(UnAuthorizationMessage)),true) { }
+        public UnAuthorizationMessage() : base(new DataContractSerializer(typeof(UnAuthorizationMessage)), true) { }
         protected override TransportContainer TKCreation(string text)
         {
             var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.UnAuthorization, MsgId = this.MsgId };

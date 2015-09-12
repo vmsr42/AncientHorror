@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:AncientHorrorClient" xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.ConnectWindow"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         x:Name="ConnWind"
         Title="Соединение с сервером"  >
     <local:BaseWindow.Resources>
@@ -16,35 +17,43 @@
             <Border.Background>
                 <SolidColorBrush Color="Gainsboro" Opacity="0.8"/>
             </Border.Background>
-            <Grid  >
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.5*" />
                     <RowDefinition />
-                    <RowDefinition Height="0.5*"/>
-                    <RowDefinition />
-                    <RowDefinition Height="0.5*"/>
-                    <RowDefinition />
-                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.4*"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Content="Имя пользователя: " FontSize="18"/>
-                <Border Grid.Row="1" Margin="0,0,10,0" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
-                    <TextBox Text="{Binding Login, ElementName=ConnWind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  TextAlignment="Left"   FontSize="18"/>
-                </Border>
-                <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Content="Пароль: " FontSize="18"/>
-                <Border Grid.Row="3" Margin="0,0,10,0" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
-                    <PasswordBox x:Name="pass"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="1" MinWidth="200" FontSize="18"/>
-                </Border>
-                <Button Margin="10,5,2,5" Content="Войти" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Width="150" Click="ConnectClick" />
-                <Button Margin="2,5,10,5" Content="Выйти" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" Width="150" Click="ExitClick" />
-                <TextBlock x:Name="textBlock" Margin="5,2,5,2" Grid.Row="6" Grid.ColumnSpan="4" Text="{Binding Error, ElementName=ConnWind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Foreground="DarkRed" Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=textBlock}" />
+                <metro:ProgressRing IsActive="True"  Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ConnWind}"/>
+                <TextBlock Grid.Row="1" Text="{Binding BusyMessage, ElementName=ConnWind}" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Times New Roman" FontSize="18" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ConnWind}" />
+                <Grid  Grid.RowSpan="2" Visibility="{Binding IsBusy, ConverterParameter=false, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ConnWind}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition />
+                        <RowDefinition Height="0.5*"/>
+                        <RowDefinition />
+                        <RowDefinition Height="0.5*"/>
+                        <RowDefinition />
+                        <RowDefinition Height="0.5*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Content="Имя пользователя: " FontSize="18"/>
+                    <Border Grid.Row="1" Margin="0,0,10,0" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
+                        <TextBox Text="{Binding Login, ElementName=ConnWind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  TextAlignment="Left"   FontSize="18"/>
+                    </Border>
+                    <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Content="Пароль: " FontSize="18"/>
+                    <Border Grid.Row="3" Margin="0,0,10,0" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
+                        <PasswordBox x:Name="pass"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="1" MinWidth="200" FontSize="18"/>
+                    </Border>
+                    <Button Margin="10,5,2,5" Content="Войти" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Width="150" Click="ConnectClick" />
+                    <Button Margin="2,5,10,5" Content="Выйти" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" Width="150" Click="ExitClick" />
+                    <TextBlock  Margin="5,2,5,2" Grid.Row="6" Grid.ColumnSpan="4" Text="{Binding Error, ElementName=ConnWind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Foreground="DarkRed" Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=textBlock}" />
+                </Grid>
             </Grid>
-
+            
         </Border>
 
     </Grid>

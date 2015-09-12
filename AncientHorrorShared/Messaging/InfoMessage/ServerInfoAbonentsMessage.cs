@@ -13,8 +13,8 @@ namespace AncientHorrorShared.Messaging.InfoMessage
     public class ServerInfoAbonentsMessage: BaseMessage
     {
         [DataMember]
-        public List<GameAbonent> Abonents { get; set; }
-        public ServerInfoAbonentsMessage() : base(new DataContractSerializer(typeof(ServerInfoAbonentsMessage)),false) { }
+        public List<GameAbonentInfo> Abonents { get; set; }
+        public ServerInfoAbonentsMessage() : base(new DataContractSerializer(typeof(ServerInfoAbonentsMessage)), false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var simmsg = new ServerInfoMessage() { Message = text, Type = SIMessageType.Abonents, MsgId = this.MsgId };

@@ -12,7 +12,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
     [DataContract]
     public class RequestRoomInfoMessage: BaseMessage
     {
-        public RequestRoomInfoMessage() : base(new DataContractSerializer(typeof(RequestRoomInfoMessage)),false) { }
+        public RequestRoomInfoMessage() : base(new DataContractSerializer(typeof(RequestRoomInfoMessage)), false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.RequestRoomInfo, MsgId = this.MsgId };

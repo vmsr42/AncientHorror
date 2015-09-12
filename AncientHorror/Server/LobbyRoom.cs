@@ -34,7 +34,7 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         break;
                     }
@@ -50,7 +50,7 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         break;
                     }
@@ -76,13 +76,13 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось создать комнату" };
                             var smsg = error.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
 
                         break;
@@ -104,28 +104,26 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         if (!done)
                         {
                             ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось подключиться к комнате" };
                             var smsg = error.GetTC();
-                            ab.SendMessage(smsg);
+                            ab.SendMessage(smsg, GetGameRoomInfo());
                         }
                         break;
                     }
                 case AbonentsCommandType.RequestRoomInfo:
                     {
-                        ServerInfoRoomsMessage riMessage = new ServerInfoRoomsMessage() { RoomIds = new List<int>(), RoomNames = new List<String>(), Owners = new List<GameAbonent>() };
+                        ServerInfoRoomsMessage riMessage = new ServerInfoRoomsMessage() { Rooms = new List<GameRoomInfo>() };
                         foreach (var room in Program.Rooms)
                             if (room.Id > 0)
                             {
-                                riMessage.RoomIds.Add(room.Id);
-                                riMessage.RoomNames.Add(room.Name);
-                                riMessage.Owners.Add(room.Owner);
+                                riMessage.Rooms.Add(room.GetGameRoomInfo());
                             }
                         var smsg = riMessage.GetTC();
-                        ab.SendMessage(smsg);
+                        ab.SendMessage(smsg, GetGameRoomInfo());
                         break;
                     }
 
@@ -135,6 +133,11 @@ namespace AncientHorror.Server
         protected override void AfterRemoveOwner()
         {
             
+        }
+
+        protected override bool HavePassword()
+        {
+            return false;
         }
     }
 }
