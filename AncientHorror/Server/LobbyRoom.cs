@@ -36,6 +36,7 @@ namespace AncientHorror.Server
                             var smsg = confirm.GetTC();
                             ab.SendMessage(smsg, GetGameRoomInfo());
                         }
+                        SendRoomStatusMessage();
                         break;
                     }
                 case AbonentsCommandType.UnAuthorization:

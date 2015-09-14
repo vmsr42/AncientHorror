@@ -1,0 +1,29 @@
+﻿<t:HeaderedControl x:Class="AncientHorrorClient.Controls.AbonentsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:t="clr-namespace:AncientHorrorClient.Controls"
+             mc:Ignorable="d" Tag="Абоненты"
+             d:DesignHeight="300" d:DesignWidth="300" x:Name="abnCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
+    <Grid >
+        <ListBox Background="Gainsboro" ItemsSource="{Binding Abonents,ElementName=abnCntrl}" Tag="{Binding ElementName=abnCntrl}" SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=abnCntrl}" SelectionMode="Single" MouseDown="ListboxClicked">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ContextMenu>
+                <ContextMenu ItemsSource="{Binding Path=PlacementTarget.Tag.AbnCommands, RelativeSource={RelativeSource Self}}"  Visibility="{Binding Path=PlacementTarget.Tag.CanSeeContextMenu, RelativeSource={RelativeSource Self}}">
+                    <ContextMenu.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding CmdName}" Tag="{Binding}" Click="MenuItemClick" IsEnabled="{Binding CanDo}" />
+                        </DataTemplate>
+                    </ContextMenu.ItemTemplate>
+                    
+                </ContextMenu>
+
+            </ListBox.ContextMenu>
+        </ListBox>
+    </Grid>
+</t:HeaderedControl>

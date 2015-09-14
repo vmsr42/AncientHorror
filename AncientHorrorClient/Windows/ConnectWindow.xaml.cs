@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AncientHorrorClient
+namespace AncientHorrorClient.Windows
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -54,12 +54,18 @@ namespace AncientHorrorClient
         private async void ConnectClick(object sender, RoutedEventArgs e)
         {
             SetBusyStatus(true, "Соединяемся с сервером");
+            RoomWindow rw = new RoomWindow();
             var answer = await Global.NetworkClient.ConnectToServer(Login, this.pass.Password);
             SetBusyStatus(false, String.Empty);
             if (!answer.Result)
+            {
                 Error = answer.Message;
+                rw.CloseWindow();
+            }
             else
-                new RoomWindow();
+            {
+                rw.ShowWindow();
+            }
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)

@@ -57,9 +57,10 @@ namespace AncientHorror.Server
         protected BlockingCollection<Abonent> abntsList = new BlockingCollection<Abonent>();
         public void SendMessage(TransportContainer msg)
         {
+            msg.Room = this.GetGameRoomInfo();
             foreach (var abn in abntsList)
             {
-                DataContractSerializer writer = new DataContractSerializer(typeof(TransportContainer));
+                msg.User = abn.Gamer;
                 using (MemoryStream ms = new MemoryStream())
                 {
                     var data = Encoding.UTF8.GetBytes(msg.UTFSerialize());
@@ -77,23 +78,30 @@ namespace AncientHorror.Server
                 if (CanAddAbonent)
                 {
                     abntsList.Add(ab);
-                    var msg = new ServerInfoAbonentsMessage() { Abonents = new List<GameAbonentInfo>() };
-                    foreach (var abon in abntsList)
-                        msg.Abonents.Add(abon.Gamer);
-                    var smsg = msg.GetTC();
-                    this.SendMessage(smsg);
+                    SendRoomStatusMessage();
                     ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
                     return true;
                 }
                 else
                     return false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+
                 return false;
             }
-
         }
+        public void SendRoomStatusMessage()
+        {
+            var msg = new ServerInfoAbonentsMessage() { Abonents = new List<GameAbonentInfo>() };
+            foreach (var abon in abntsList)
+                msg.Abonents.Add(abon.Gamer);
+            var smsg = msg.GetTC();
+            this.SendMessage(smsg);
+        }
+
+
+
 
         private void AfterRecieve(IAsyncResult ar)
         {
@@ -131,12 +139,12 @@ namespace AncientHorror.Server
                     }
                 }
             }
-            catch 
+            catch
             {
 
-                    ab.Status = AbonentStatusEnum.Disconnected;
-                    ab.Gamer.Name = String.Empty;
-                    ab.Gamer.Id = 0;
+                ab.Status = AbonentStatusEnum.Disconnected;
+                ab.Gamer.Name = String.Empty;
+                ab.Gamer.Id = 0;
             }
             try
             {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AncientHorrorClient
+namespace AncientHorrorClient.Windows
 {
     public class BaseWindow: Window, INotifyPropertyChanged
     {
@@ -37,12 +37,17 @@ namespace AncientHorrorClient
         public BaseWindow()
         {
             ismain = false;
+            this.Hide();
         }
         public BaseWindow(bool ismain)
         {
+            
+            this.ismain = ismain;
+        }
+        public void ShowWindow()
+        {
             if (Global.CurrentWindow != null)
                 Global.CurrentWindow.CloseWindow();
-            this.ismain = ismain;
             Global.CurrentWindow = this;
             this.Show();
         }
@@ -50,7 +55,8 @@ namespace AncientHorrorClient
         {
             this.Dispose();
             this.Close();
-            Global.CurrentWindow = null;
+            if (Global.CurrentWindow==this)
+                Global.CurrentWindow = null;
         }
         public virtual void Dispose() { }
         protected void SetBusyStatus(bool isBusy, String bmsg)

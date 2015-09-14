@@ -4,6 +4,7 @@ using AncientHorrorShared.Messaging.InfoMessage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,23 +18,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AncientHorrorClient
+namespace AncientHorrorClient.Windows
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class RoomWindow : BaseWindow
     {
-        public Boolean IsLobby 
-        { 
-            get
-            {
-                if (Room.Id == 0)
-                    return true;
-                else
-                    return false;
-            }
-        }
+        public String MessageText { get; set; }
+        
         private string error = String.Empty;
         public String Error
         {
@@ -50,7 +43,7 @@ namespace AncientHorrorClient
                 }
             }
         }
-        private GameAbonentInfo abon = null;
+        private GameAbonentInfo abon = Global.NetworkClient.Abonent;
         public GameAbonentInfo Abonent
         {
             get
@@ -66,7 +59,7 @@ namespace AncientHorrorClient
                 }
             }
         }
-        private GameRoomInfo room = null;
+        private GameRoomInfo room = Global.NetworkClient.Room;
         public GameRoomInfo Room
         {
 
@@ -90,10 +83,48 @@ namespace AncientHorrorClient
         public RoomWindow()
             : base(false)
         {
+            Messages = new ObservableCollection<ChatMessage>();
+            Rooms = new ObservableCollection<GameRoomInfo>();
+            Abonents = new ObservableCollection<GameAbonentInfo>();
             Global.NetworkClient.AbonentChanged += NetworkClient_AbonentChanged;
             Global.NetworkClient.RoomChanged+=NetworkClient_RoomChanged;
             Global.NetworkClient.RoomsMessageRecieved+=NetworkClient_RoomsMessageRecieved;
+            Rooms.CollectionChanged+=Rooms_CollectionChanged;
+            Abonents.CollectionChanged+=Abonents_CollectionChanged;
             InitializeComponent();
+        }
+
+        private void Abonents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems!=null)
+                foreach (var item in e.NewItems)
+                {
+                    GameAbonentInfo abn = (GameAbonentInfo)item;
+                    Messages.Add(new ChatMessage() { Abonent = abn, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату " });
+                }
+            if (e.OldItems != null)
+                foreach (var item in e.OldItems)
+                {
+                    GameAbonentInfo abn = (GameAbonentInfo)item;
+                    Messages.Add(new ChatMessage() { Abonent = abn, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вышел из комнаты "  });
+                }
+        }
+
+        private void Rooms_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Room.IsLobby)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    GameRoomInfo rm = (GameRoomInfo)item;
+                    Messages.Add(new ChatMessage() { Abonent = rm.Owner, Roomid = rm.Id, RoomName = rm.Name, Time = DateTime.Now, Message = "создал комнату "  });
+                }
+                foreach (var item in e.OldItems)
+                {
+                    GameRoomInfo rm = (GameRoomInfo)item;
+                    Messages.Add(new ChatMessage() { Abonent = rm.Owner, Roomid = rm.Id, RoomName = rm.Name, Time = DateTime.Now, Message = "удалил комнату "  });
+                }
+            }
         }
 
         private void NetworkClient_RoomChanged(GameRoomInfo rm)
@@ -138,16 +169,35 @@ namespace AncientHorrorClient
 
         private void AfterRoomsInfoRecived(ServerInfoRoomsMessage rmsmsg)
         {
-            //сравнение что было с тем что есть + запись в чат если лобби
-            //обновление списка комнат
-            throw new NotImplementedException();
+            var oldRooms = Rooms.ToList();
+            var newRooms = new List<GameRoomInfo>();
+            foreach (var rm in rmsmsg.Rooms)
+                if (oldRooms.Contains(rm))
+                    oldRooms.Remove(rm);
+                else
+                    newRooms.Add(rm);
+            foreach (var rm in oldRooms)
+                Rooms.Remove(rm);
+            foreach (var rm in newRooms)
+                Rooms.Add(rm);
         }
 
         private void AfterAbonentsInfoRecieved(ServerInfoAbonentsMessage abnmsg)
         {
-            //сравнение что было с тем что есть + запись в чат
-            //обновление списка абонентов
-            throw new NotImplementedException();
+            var oldAbns = Abonents.ToList();
+            var newAbns = new List<GameAbonentInfo>();
+            foreach (var abn in abnmsg.Abonents)
+                if (oldAbns.Contains(abn))
+                {
+                    Abonents.First(a => a.Id == abn.Id).Name = abn.Name;
+                    oldAbns.Remove(abn);
+                }
+                else
+                    newAbns.Add(abn);
+            foreach (var rm in oldAbns)
+                Abonents.Remove(rm);
+            foreach (var rm in newAbns)
+                Abonents.Add(rm);
         }
 
         public override void Dispose()
@@ -155,6 +205,13 @@ namespace AncientHorrorClient
             Global.NetworkClient.AbonentChanged -= NetworkClient_AbonentChanged;
             Global.NetworkClient.RoomChanged -= NetworkClient_RoomChanged;
             Global.NetworkClient.RoomsMessageRecieved -= NetworkClient_RoomsMessageRecieved;
+            Rooms.CollectionChanged -= Rooms_CollectionChanged;
+            Abonents.CollectionChanged -= Abonents_CollectionChanged;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату" });
         }
     }
 }

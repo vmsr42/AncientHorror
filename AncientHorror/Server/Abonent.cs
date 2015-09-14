@@ -22,7 +22,6 @@ namespace AncientHorror.Server
         public void SendMessage(TransportContainer msg, GameRoomInfo room)
         {
             msg.Room = room;
-            DataContractSerializer writer = new DataContractSerializer(typeof(TransportContainer));
             msg.User = this.Gamer;
                 using (MemoryStream ms = new MemoryStream())
                 {

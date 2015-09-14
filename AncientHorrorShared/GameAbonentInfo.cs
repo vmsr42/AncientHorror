@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -8,13 +9,51 @@ using System.Threading.Tasks;
 namespace AncientHorrorShared
 {
     [DataContract]
-    public class GameAbonentInfo
+    public class GameAbonentInfo: INotifyPropertyChanged
     {
         [DataMember]
         public int Id { get; set; }
         [IgnoreDataMember]
         public int UserId;
         [DataMember]
-        public String Name { get; set; }
+        private String name = string.Empty;
+        public String Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                if (name!=value)
+                {
+                    name = value;
+                    OnPropertyChanged("Name");
+                }
+            }
+        }
+        public override bool Equals(object obj)
+        {
+            try
+            {
+                GameAbonentInfo abon = (GameAbonentInfo)obj;
+                return this.Id == abon.Id;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string property)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(property));
+            }
+        }
+        #endregion INotifyPropertyChanged
     }
 }
