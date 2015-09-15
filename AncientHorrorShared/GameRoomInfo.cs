@@ -17,7 +17,7 @@ namespace AncientHorrorShared
         [DataMember]
         public GameAbonentInfo Owner { get; set; }
         [DataMember]
-        public bool HavePasswod { get; set; }
+        public bool HavePassword { get; set; }
         [IgnoreDataMember]
         public Boolean IsLobby
         {
@@ -28,6 +28,10 @@ namespace AncientHorrorShared
                 else
                     return false;
             }
+        }
+        public override bool Equals(object obj)
+        {
+            return this.GetHashCode() == obj.GetHashCode();
         }
         public override int GetHashCode()
         {

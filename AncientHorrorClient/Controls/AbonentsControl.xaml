@@ -7,10 +7,23 @@
              mc:Ignorable="d" Tag="Абоненты"
              d:DesignHeight="300" d:DesignWidth="300" x:Name="abnCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
     <Grid >
-        <ListBox Background="Gainsboro" ItemsSource="{Binding Abonents,ElementName=abnCntrl}" Tag="{Binding ElementName=abnCntrl}" SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=abnCntrl}" SelectionMode="Single" MouseDown="ListboxClicked">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="Gainsboro">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="&#57626;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20"/>
+            <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=abnCntrl}" Margin="1"  Background="#FFE8E7E7"/>
+        </Grid>
+        <ScrollViewer Grid.Row="1">
+        <ListBox x:Name="AbnList"  Background="Gainsboro" ItemsSource="{Binding Abonents,ElementName=abnCntrl}" Tag="{Binding ElementName=abnCntrl}" SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=abnCntrl}" SelectionMode="Single" MouseDown="ListboxClicked" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Label Content="{Binding Name}"/>
+                    <Label Content="{Binding Name}" FontSize="14" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ContextMenu>
@@ -25,5 +38,6 @@
 
             </ListBox.ContextMenu>
         </ListBox>
+        </ScrollViewer>
     </Grid>
 </t:HeaderedControl>

@@ -182,7 +182,7 @@ namespace AncientHorror.Server
             info.Id = this.Id;
             info.Name = this.Name;
             info.Owner = this.Owner;
-            info.HavePasswod = HavePassword();
+            info.HavePassword = HavePassword();
             return info;
         }
         protected abstract void AfterRecieveCommand(AbonentsCommandMessage acMsg, Abonent ab);

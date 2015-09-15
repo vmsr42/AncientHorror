@@ -57,5 +57,13 @@ namespace AncientHorrorShared.Messaging
         protected abstract void CopyMessageField(BaseMessage msg);
         protected abstract TransportContainer TKCreation(String text);
         public abstract BaseMessage GetInnerMessage();
+        public override int GetHashCode()
+        {
+            return MsgId.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return this.GetHashCode() == obj.GetHashCode();
+        }
     }
 }

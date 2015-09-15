@@ -1,0 +1,56 @@
+﻿<t:HeaderedControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:t="clr-namespace:AncientHorrorClient.Controls"
+             xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.Controls.RoomsControl"
+             mc:Ignorable="d" Tag="{Binding RoomName, ElementName=rmCntrl}"
+             d:DesignHeight="600" d:DesignWidth="600" x:Name="rmCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
+    <t:HeaderedControl.Resources>
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </t:HeaderedControl.Resources>
+    <Grid Background="Gainsboro">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="Gainsboro">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="&#xE11A;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20"/>
+            <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1"  Background="#FFE8E7E7"/>
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Background="Gainsboro">
+            <Label Content="Имя" Width="100"/>
+            <Label Content="Владелец" Width="100"/>
+        </StackPanel>
+        <ScrollViewer Grid.Row="2">
+            <ListBox x:Name="RmList"  Background="Gainsboro" ItemsSource="{Binding Rooms, ElementName=rmCntrl}"  SelectedItem="{Binding Selected, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single"  >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{Binding Name}" FontSize="14" Width="100" />
+                            <Label Grid.Column="1" Content="{Binding Owner.Name}" FontSize="14" Width="100" />
+                            <TextBlock Grid.Column="2" Text="&#57746;" FontFamily="Segoe UI Symbol" Width="100" FontSize="18" Visibility="{Binding HavePassword, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        <DockPanel Grid.Row="3" Background="Gainsboro" HorizontalAlignment="Center" >
+            <Button Content="Создать комнату" Click="CreateRoomClick" Visibility="{Binding IsCreateRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button Content="Присоединиться" Click="JoinRoomClick" Visibility="{Binding IsJoinRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Content="Выйти из комнаты" Click="ExitRoomClick"/>
+        </DockPanel>
+    </Grid>
+</t:HeaderedControl>

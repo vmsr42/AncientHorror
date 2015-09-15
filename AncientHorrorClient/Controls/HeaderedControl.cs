@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AncientHorrorClient.Windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -95,6 +96,27 @@ namespace AncientHorrorClient.Controls
                 return Visibility.Visible;
             }
         }
+
+        public static readonly DependencyProperty IsBusyProperty =
+DependencyProperty.Register("IsBusy", typeof(bool), typeof(HeaderedControl),new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, IsBusyChanged));
+
+        private static void IsBusyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
+
+        public bool IsBusy
+        {
+            get
+            {
+                return (bool)this.GetValue(IsBusyProperty);
+            }
+            set
+            {
+                this.SetValue(IsBusyProperty, value);
+            }
+        }
+
 
         private void MinimizeCmd(object sender, RoutedEventArgs e)
         {

@@ -40,7 +40,15 @@ namespace AncientHorrorClient.Network
             }
             private set
             {
-                if (value!=abon)
+                if (value==null||abon==null)
+                {
+                    if (abon!=value)
+                    {
+                        abon = value;
+                        OnAbonentChanged(abon);
+                    }
+                }
+                if (!value.Equals(abon))
                 {
                     abon = value;
                     OnAbonentChanged(abon);
@@ -57,7 +65,7 @@ namespace AncientHorrorClient.Network
                 handler(ab);
             }
         }
-        private GameRoomInfo room = new GameRoomInfo();
+        private GameRoomInfo room = new GameRoomInfo() { Id = -2 };
         public GameRoomInfo Room
         {
             get
@@ -66,7 +74,15 @@ namespace AncientHorrorClient.Network
             }
             private set
             {
-                if (value != room)
+                if (value == null || room == null)
+                {
+                    if (room != value)
+                    {
+                        room = value;
+                        OnRoomChanged(room);
+                    }
+                }
+                if (!value.Equals(room))
                 {
                     room = value;
                     OnRoomChanged(room);
@@ -186,6 +202,8 @@ namespace AncientHorrorClient.Network
         {
             try
             {
+                Room = new GameRoomInfo() { Id = -2 };
+                Abonent = new GameAbonentInfo();
                 var cl = new TcpClient(Global.servLink, Global.servPort);
                 cl.ReceiveTimeout = timeout * 1000;
                 client = cl.Client;
@@ -223,6 +241,8 @@ namespace AncientHorrorClient.Network
                 finally
                 {
                     client.Dispose();
+                    Room = new GameRoomInfo() { Id = -2 };
+                    Abonent = new GameAbonentInfo();
                 }
                 client = null;
                 OnDisconnected();

@@ -13,8 +13,23 @@ namespace AncientHorrorShared
     {
         [DataMember]
         public int Id { get; set; }
-        [IgnoreDataMember]
-        public int UserId;
+        private int userId;
+        [DataMember]
+        public int UserId
+        {
+            get
+            {
+                return userId;
+            }
+            set
+            {
+                if (userId != value)
+                {
+                    userId = value;
+                    OnPropertyChanged("UserId");
+                }
+            }
+        }
         [DataMember]
         private String name = string.Empty;
         public String Name
@@ -35,6 +50,10 @@ namespace AncientHorrorShared
         public override int GetHashCode()
         {
             return this.Id;
+        }
+        public override bool Equals(object obj)
+        {
+            return this.GetHashCode() == obj.GetHashCode();
         }
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

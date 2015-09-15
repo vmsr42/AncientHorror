@@ -84,6 +84,7 @@ namespace AncientHorrorClient.Windows
         {
             Messages = new ObservableCollection<ChatMessage>();
             Rooms = new ObservableCollection<GameRoomInfo>();
+            Rooms.Add(new GameRoomInfo() { Name = "ssss", Id = 11, HavePassword = true, Owner = new GameAbonentInfo() { Name = "dddd", Id = 4 } });
             Abonents = new ObservableCollection<GameAbonentInfo>();
             Global.NetworkClient.AbonentChanged += NetworkClient_AbonentChanged;
             Global.NetworkClient.RoomChanged+=NetworkClient_RoomChanged;
@@ -130,18 +131,37 @@ namespace AncientHorrorClient.Windows
 
         private void NetworkClient_RoomChanged(GameRoomInfo rm)
         {
-            Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вышел из комнаты" });
+            if (Room.Id>-1)
+                Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вышел из комнаты" });
             Room = rm;
-            Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату" });
+            if (Room.Id > -1)
+                Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату" });
         }
 
         private void NetworkClient_AbonentChanged(GameAbonentInfo ab)
         {
-            Messages.Add(new ChatMessage(){ Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "сменил имя на "+ab.Name });
-            Abonent = ab;
-            
+            if (Abonent.Id > 0)
+                Messages.Add(new ChatMessage(){ Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "сменил имя на " + ab.Name });
+            Abonent = ab;    
         }
-
+        private void AbonentChanged(GameAbonentInfo ab, GameAbonentInfo newab)
+        {
+            bool needupdate = false;
+            if (ab.Name != newab.Name)
+            {
+                needupdate = true;
+                Messages.Add(new ChatMessage() { Abonent = new GameAbonentInfo() { Id = ab.Id, Name = ab.Name, UserId = ab.UserId }, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "сменил имя на "+ newab.Name });
+            }
+            if (ab.UserId!=newab.UserId)
+            {
+                needupdate = true;
+            }
+            if (needupdate)
+            {
+                ab.Name = newab.Name;
+                ab.UserId = newab.UserId;
+            }
+        }
         private void NetworkClient_RoomsMessageRecieved(BaseMessage msg)
         {
             ServerInfoMessage simsg = (ServerInfoMessage)msg;
@@ -188,13 +208,16 @@ namespace AncientHorrorClient.Windows
             var oldAbns = Abonents.ToList();
             var newAbns = new List<GameAbonentInfo>();
             foreach (var abn in abnmsg.Abonents)
-                if (oldAbns.Contains(abn))
+            {
+                var ab = Abonents.FirstOrDefault(a => a.Id == abn.Id);
+                if (ab != null)
                 {
-                    Abonents.First(a => a.Id == abn.Id).Name = abn.Name;
+                    AbonentChanged(ab, abn);
                     oldAbns.Remove(abn);
                 }
                 else
                     newAbns.Add(abn);
+            }
             foreach (var rm in oldAbns)
                 Abonents.Remove(rm);
             foreach (var rm in newAbns)

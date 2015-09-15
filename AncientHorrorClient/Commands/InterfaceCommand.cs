@@ -19,7 +19,6 @@ namespace AncientHorrorClient.Commands
                 return CanExecute(Abonent);
             }
         }
-        private bool init = true;
         private GameAbonentInfo abonent = null;
         public GameAbonentInfo Abonent
         {

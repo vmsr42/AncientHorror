@@ -26,13 +26,30 @@ namespace AncientHorrorClient.Controls
     public partial class AbonentsControl : HeaderedControl
     {
 
-        public delegate void CmdSelectedDelegate(InterfaceCommand cmd);
-        public event CmdSelectedDelegate CommandSelected;
-        private void OnCommandChanged(InterfaceCommand cmd)
+        private String filtertext = String.Empty;
+        public String FilterText
         {
-            var handler = CommandSelected;
-            if (handler != null)
-                handler(cmd);
+            get
+            {
+                return filtertext;
+            }
+            set
+            {
+                if (value!=filtertext)
+                {
+                    filtertext = value;
+                    OnPropertyChanged("FilterText");
+                    this.AbnList.Items.Filter = null;
+                    this.AbnList.Items.Filter = delegate(object obj)
+                    {
+                        GameAbonentInfo ab = (GameAbonentInfo)obj;
+                        if (ab.Name.ToUpper().Trim().Contains(filtertext.ToUpper().Trim()))
+                            return true;
+                        else
+                            return false;
+                    };
+                }
+            }
         }
         private GameAbonentInfo selected;
         public GameAbonentInfo Selected 

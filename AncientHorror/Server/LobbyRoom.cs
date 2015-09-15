@@ -28,6 +28,7 @@ namespace AncientHorror.Server
                         //реализация логики авторизации пока пусть будет типа авторизован
                         ab.Status = AbonentStatusEnum.Authorized;
                         ab.Gamer.Id = 1;
+                        ab.Gamer.UserId = 1;
                         ab.Gamer.Name = amsg.Login;
                         done = true;
                         if (amsg.NeedConfirm)

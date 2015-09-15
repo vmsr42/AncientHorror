@@ -30,7 +30,7 @@ namespace AncientHorrorClient.Controls
             get
             {
                 if (removeUserCmd == null)
-                    removeUserCmd = new RemoveFromChatCmd(Chanels);
+                    removeUserCmd = new RemoveFromChatCmd(RemoveChanel);
                 return removeUserCmd;
             }
         }
@@ -58,9 +58,7 @@ DependencyProperty.Register("Messages", typeof(ObservableCollection<ChatMessage>
                 {
                     chanels = new ObservableCollection<GameAbonentInfo>();
                     chanels.Add(new GameAbonentInfo() { Name = "Общий", Id = -1 });
-                    chanels.Add(new GameAbonentInfo() { Name = "Общий2", Id = 1 });
-                    chanels.Add(new GameAbonentInfo() { Name = "Общий3", Id = 2 });
-                    chanels.Add(new GameAbonentInfo() { Name = "Общий4", Id = 3 });
+                    chanels.Add(new GameAbonentInfo() { Name = "Общий2", Id = 2 });
                 }
                 return chanels;
             }
@@ -103,16 +101,27 @@ DependencyProperty.Register("Messages", typeof(ObservableCollection<ChatMessage>
         {
             InitializeComponent();
         }
-        public void AddToChanel(GameAbonentInfo ab)
+        public void AddChanel(GameAbonentInfo ab)
         {
             if (!Chanels.Contains(ab))
                 Chanels.Add(ab);
             Selected = ab;
         }
-
-        private void AbonentLabel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        public void RemoveChanel(GameAbonentInfo ab)
         {
+            if (Chanels.Contains(ab))
+            {
+                if (selected.Equals(ab))
+                {
+                    Selected = Chanels.ElementAt(Chanels.IndexOf(ab) - 1);
+                }
+                Chanels.Remove(ab);
+            }
+        }
 
+        private void SendClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Пока не реализовано, но сообщение было: "+MsgToSend);
         }
     }
 }

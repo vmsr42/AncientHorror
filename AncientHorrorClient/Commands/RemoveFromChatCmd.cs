@@ -11,12 +11,12 @@ namespace AncientHorrorClient.Commands
 {
     public class RemoveFromChatCmd: InterfaceCommand
     {
-        
-        private ObservableCollection<GameAbonentInfo> chatusers = null;
-        public RemoveFromChatCmd(ObservableCollection<GameAbonentInfo> users)
+        public delegate void removeAbDelegate(GameAbonentInfo abon);
+        private removeAbDelegate CmdAction; 
+        public RemoveFromChatCmd( removeAbDelegate action)
             : base("Закрыть вкладку")
         {
-            chatusers = users;
+            CmdAction = action;
         }
         
         public override bool CanExecute(object parameter)
@@ -30,8 +30,8 @@ namespace AncientHorrorClient.Commands
         public override void Execute(object parameter)
         {
             GameAbonentInfo ab = (GameAbonentInfo)parameter;
-            if (chatusers.Contains(ab))
-                chatusers.Remove(ab);
+            CmdAction(ab);
+
         }
     }
 }

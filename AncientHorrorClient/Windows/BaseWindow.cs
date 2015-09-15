@@ -25,7 +25,16 @@ namespace AncientHorrorClient.Windows
             {
                 return isbusy;
             }
+            set
+            {
+                if (value!=isbusy)
+                {
+                    isbusy = value;
+                    OnPropertyChanged("IsBusy");
+                }
+            }
         }
+        
         private Boolean ismain;
         public Boolean IsMain
         {

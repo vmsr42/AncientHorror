@@ -86,6 +86,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RemoveFromChatCmd.cs" />
+    <Compile Include="Controls\RoomsControl.xaml.cs">
+      <DependentUpon>RoomsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ChatControl.xaml.cs">
       <DependentUpon>ChatControl.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,10 @@
     <Compile Include="Test.cs" />
     <Compile Include="WaveCanvas.cs" />
     <Compile Include="Controls\HeaderedControl.cs" />
+    <Page Include="Controls\RoomsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ChatControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
