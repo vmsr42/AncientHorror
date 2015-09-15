@@ -68,13 +68,13 @@
                             <RowDefinition Height="{Binding HeaderRow, Converter={StaticResource RowDefHeaderConverter}, ConverterParameter=2}"/>
                             <RowDefinition Height="{Binding HeaderRow, Converter={StaticResource RowDefHeaderConverter}, ConverterParameter=3}"/>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="{Binding HeaderRow}" Background="Silver" Height="40">
+                        <Grid Grid.Row="{Binding HeaderRow}" Background="Silver" Height="40" VerticalAlignment="Bottom">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="40"/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" >
+                            <Grid Grid.Column="0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="20"/>

@@ -25,7 +25,6 @@ namespace AncientHorrorClient.Windows
     /// </summary>
     public partial class RoomWindow : BaseWindow
     {
-        public String MessageText { get; set; }
         
         private string error = String.Empty;
         public String Error
@@ -100,13 +99,15 @@ namespace AncientHorrorClient.Windows
                 foreach (var item in e.NewItems)
                 {
                     GameAbonentInfo abn = (GameAbonentInfo)item;
-                    Messages.Add(new ChatMessage() { Abonent = abn, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату " });
+                    if (abn.Id > 0 && abn.Id != Abonent.Id)
+                        Messages.Add(new ChatMessage() { Abonent = abn, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату " });
                 }
             if (e.OldItems != null)
                 foreach (var item in e.OldItems)
                 {
                     GameAbonentInfo abn = (GameAbonentInfo)item;
-                    Messages.Add(new ChatMessage() { Abonent = abn, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вышел из комнаты "  });
+                    if (abn.Id > 0 && abn.Id != Abonent.Id)
+                        Messages.Add(new ChatMessage() { Abonent = abn, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вышел из комнаты "  });
                 }
         }
 

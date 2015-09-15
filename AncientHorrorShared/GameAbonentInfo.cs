@@ -32,17 +32,9 @@ namespace AncientHorrorShared
                 }
             }
         }
-        public override bool Equals(object obj)
+        public override int GetHashCode()
         {
-            try
-            {
-                GameAbonentInfo abon = (GameAbonentInfo)obj;
-                return this.Id == abon.Id;
-            }
-            catch
-            {
-                return false;
-            }
+            return this.Id;
         }
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

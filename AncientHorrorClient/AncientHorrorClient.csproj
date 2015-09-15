@@ -85,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RemoveFromChatCmd.cs" />
+    <Compile Include="Controls\ChatControl.xaml.cs">
+      <DependentUpon>ChatControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\BaseWindow.cs" />
     <Compile Include="ChatMessageType.cs" />
     <Compile Include="ChatMessage.cs" />
@@ -106,6 +110,10 @@
     <Compile Include="Test.cs" />
     <Compile Include="WaveCanvas.cs" />
     <Compile Include="Controls\HeaderedControl.cs" />
+    <Page Include="Controls\ChatControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\ConnectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
