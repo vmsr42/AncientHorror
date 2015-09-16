@@ -10,30 +10,6 @@ namespace AncientHorrorClient.Windows
 {
     public class BaseWindow: Window, INotifyPropertyChanged
     {
-        private String busyMsg = String.Empty;
-        public String BusyMessage
-        {
-            get 
-            {
-                return busyMsg;
-            }
-        }
-        private Boolean isbusy = false;
-        public Boolean IsBusy
-        {
-            get
-            {
-                return isbusy;
-            }
-            set
-            {
-                if (value!=isbusy)
-                {
-                    isbusy = value;
-                    OnPropertyChanged("IsBusy");
-                }
-            }
-        }
         
         private Boolean ismain;
         public Boolean IsMain
@@ -68,21 +44,7 @@ namespace AncientHorrorClient.Windows
                 Global.CurrentWindow = null;
         }
         public virtual void Dispose() { }
-        protected void SetBusyStatus(bool isBusy, String bmsg)
-        {
-            if (!isBusy)
-            {
-                isbusy = false;
-                busyMsg = String.Empty;
-            }
-            else
-            {
-                isbusy = true;
-                busyMsg = bmsg;
-            }
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("BusyMessage");
-        }
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string property)

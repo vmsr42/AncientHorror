@@ -97,26 +97,7 @@ namespace AncientHorrorClient.Controls
             }
         }
 
-        public static readonly DependencyProperty IsBusyProperty =
-DependencyProperty.Register("IsBusy", typeof(bool), typeof(HeaderedControl),new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, IsBusyChanged));
-
-        private static void IsBusyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            
-        }
-
-        public bool IsBusy
-        {
-            get
-            {
-                return (bool)this.GetValue(IsBusyProperty);
-            }
-            set
-            {
-                this.SetValue(IsBusyProperty, value);
-            }
-        }
-
+        
 
         private void MinimizeCmd(object sender, RoutedEventArgs e)
         {

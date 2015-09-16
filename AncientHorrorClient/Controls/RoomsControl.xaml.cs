@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using AncientHorrorClient.Commands;
 using AncientHorrorClient.Controls;
 using AncientHorrorShared;
+using AncientHorrorClient.Helpers;
+using AncientHorrorClient.Windows;
 
 namespace AncientHorrorClient.Controls
 {
@@ -47,11 +49,11 @@ namespace AncientHorrorClient.Controls
             }
 
         }
-        public String RoomName
+        public GameRoomInfo Room
         {
             get
             {
-                return Global.NetworkClient.Room.Name;
+                return Global.NetworkClient.Room;
             }
         }
         private String filtertext = String.Empty;
@@ -118,7 +120,7 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
 
         private void NetworkClient_RoomChanged(GameRoomInfo ab)
         {
-            OnPropertyChanged("RoomName");
+            OnPropertyChanged("Room");
             OnPropertyChanged("IsJoinRVisible");
             OnPropertyChanged("IsCreateRVisible");
         }
@@ -127,7 +129,9 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
         {
             if (IsCreateRVisible)
             {
-                this.IsBusy = true;
+                CreateRoomWindow crw = new CreateRoomWindow();
+                crw.Closed += crw_Closed;
+                crw.ShowDialog();
             }
         }
 
@@ -139,9 +143,20 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
             }
         }
 
+        private void crw_Closed(object sender, EventArgs e)
+        {
+            CreateRoomWindow crw = (CreateRoomWindow)sender;
+            
+        }
+
         private void ExitRoomClick(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Selected = null;
         }
        
 

@@ -14,6 +14,7 @@ using AncientHorrorShared.Messaging.InfoMessage;
 using AncientHorrorShared.Messaging.ConfirmMessage;
 using System.Threading;
 using AncientHorrorShared.Messaging.AbonentsCommand;
+using AncientHorrorClient.Helpers;
 
 namespace AncientHorrorClient.Network
 {
@@ -204,6 +205,7 @@ namespace AncientHorrorClient.Network
             {
                 Room = new GameRoomInfo() { Id = -2 };
                 Abonent = new GameAbonentInfo();
+                Global.Status = BusyMessageEnum.Connecting;
                 var cl = new TcpClient(Global.servLink, Global.servPort);
                 cl.ReceiveTimeout = timeout * 1000;
                 client = cl.Client;
@@ -211,14 +213,17 @@ namespace AncientHorrorClient.Network
             }
             catch(Exception ex)
             {
-                return new ClientAnswer() { Result=false, Message="Не удалось подключиться к серверу по причине: "+ex.Message };
+                Global.Status = BusyMessageEnum.None;
+                return new ClientAnswer() { Result=false, Message=ex.Message };
             }
             bWorker.DoWork += bWorker_DoWork;
             bWorker.ProgressChanged += bWorker_ProgressChanged;
             bWorker.WorkerReportsProgress = true;
             bWorker.RunWorkerAsync();
+            Global.Status = BusyMessageEnum.Authorizing;
             var answ = await this.SendMessage(new AuthorizationMessage() { Login = login, Password = password });
             string msg = String.Empty;
+            Global.Status = BusyMessageEnum.None;
             if (!answ.Result)
             {
                 this.Disconnect();
@@ -278,6 +283,7 @@ namespace AncientHorrorClient.Network
             TransportContainer tc = (TransportContainer)e.UserState;
             this.Abonent = tc.User;
             this.Room = tc.Room;
+            this.Room.Capacity = tc.Room.Capacity;
             switch(tc.Type)
             {
                 case TCTypes.Confirm:

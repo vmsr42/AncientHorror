@@ -21,28 +21,15 @@ namespace AncientHorrorClient.Windows
     /// </summary>
     public partial class ConnectWindow : BaseWindow
     {
-        private String error = String.Empty;
-        public String Error
+        public String Error { get; set; }
+        public Visibility HasError
         {
             get
             {
-                return error;
-            }
-            set
-            {
-                if (value!=error)
-                {
-                    error = value;
-                    OnPropertyChanged("Error");
-                    OnPropertyChanged("HasError");
-                }
-            }
-        }
-        public Boolean HasError
-        {
-            get
-            {
-                return !String.IsNullOrWhiteSpace(Error);
+                if (String.IsNullOrWhiteSpace(Error))
+                    return Visibility.Collapsed;
+                else
+                    return Visibility.Visible;
             }
         }
         public String Login { get; set; }
@@ -54,19 +41,23 @@ namespace AncientHorrorClient.Windows
 
         private async void ConnectClick(object sender, RoutedEventArgs e)
         {
-            SetBusyStatus(true, "Соединяемся с сервером");
+
             RoomWindow rw = new RoomWindow();
             var answer = await Global.NetworkClient.ConnectToServer(Login, this.pass.Password);
-            SetBusyStatus(false, String.Empty);
+
             if (!answer.Result)
             {
                 Error = answer.Message;
                 rw.CloseWindow();
+                
             }
             else
             {
+                Error = String.Empty;
                 rw.ShowWindow();
             }
+            OnPropertyChanged("Error");
+            OnPropertyChanged("HasError");
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)

@@ -34,7 +34,7 @@ namespace AncientHorror.Server
                 return _name;
             }
         }
-
+        private int capacity = 0;
         private int Capability = 0;
         public Boolean CanAddAbonent
         {
@@ -42,7 +42,7 @@ namespace AncientHorror.Server
             {
                 if (Capability == 0)
                     return true;
-                if (abntsList.Count < Capability)
+                if (capacity < Capability)
                     return true;
                 return false;
             }
@@ -78,6 +78,7 @@ namespace AncientHorror.Server
                 if (CanAddAbonent)
                 {
                     abntsList.Add(ab);
+                    capacity++;
                     SendRoomStatusMessage();
                     ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
                     return true;
@@ -165,6 +166,7 @@ namespace AncientHorror.Server
         {
             if (abntsList.TryTake(out ab))
             {
+                capacity--;
                 var msg = new ServerInfoAbonentsMessage() { };
                 foreach (var abon in abntsList)
                     msg.Abonents.Add(abon.Gamer);
@@ -183,6 +185,8 @@ namespace AncientHorror.Server
             info.Name = this.Name;
             info.Owner = this.Owner;
             info.HavePassword = HavePassword();
+            info.Capability = this.Capability;
+            info.Capacity = this.capacity;
             return info;
         }
         protected abstract void AfterRecieveCommand(AbonentsCommandMessage acMsg, Abonent ab);
