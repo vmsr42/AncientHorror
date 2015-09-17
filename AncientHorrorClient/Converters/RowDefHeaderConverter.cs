@@ -17,7 +17,7 @@ namespace AncientHorrorClient.Converters
             int rowNumber = int.Parse(parameter.ToString());
             int curHeader = int.Parse(value.ToString());
             if (curHeader == rowNumber)
-                return GridLength.Auto;
+                return new GridLength(40, GridUnitType.Pixel);
             else
                 return new GridLength(1, GridUnitType.Star);
         }

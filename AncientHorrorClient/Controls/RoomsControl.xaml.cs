@@ -29,6 +29,17 @@ namespace AncientHorrorClient.Controls
     /// </summary>
     public partial class RoomsControl : HeaderedControl
     {
+        public bool IsOwner
+        {
+            get
+            {
+                if (Room == null||Room.Owner==null)
+                    return false;
+                if (Room.Owner.Id == Global.NetworkClient.Abonent.Id)
+                    return true;
+                return false;
+            }
+        }
         public string OwnerName
         {
             get
@@ -43,9 +54,9 @@ namespace AncientHorrorClient.Controls
             get
             {
                 if (!Room.IsLobby)
-                    return 1;
+                    return 2;
                 else
-                    return 4;
+                    return 1;
             }
         }
         public String Error { get; set; }
@@ -156,7 +167,9 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
             OnPropertyChanged("OwnerName");
             OnPropertyChanged("IsJoinRVisible");
             OnPropertyChanged("IsCreateRVisible");
-            OnPropertyChanged("ButtonsRow");          
+            OnPropertyChanged("ButtonsRow");
+            OnPropertyChanged("IsOwner");   
+            
         }
 
         private void CreateRoomClick(object sender, RoutedEventArgs e)
@@ -245,6 +258,11 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             Selected = null;
+        }
+
+        private void StartRoomClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Ну типа стартовал");
         }
        
 

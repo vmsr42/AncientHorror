@@ -40,6 +40,11 @@ namespace AncientHorrorClient.Windows
             var parent = Global.CurrentWindow;
             double top = parent.Top + parent.ActualHeight / 2-150;
             double left = parent.Left + parent.ActualWidth / 2-150;
+            if (parent.WindowState != System.Windows.WindowState.Normal)
+            {
+                top = SystemParameters.PrimaryScreenHeight / 2 - 150;
+                left = SystemParameters.PrimaryScreenWidth / 2 - 150;
+            }
             this.Top = top;
             this.Left = left;
             Capability = "8";

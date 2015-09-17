@@ -58,13 +58,51 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="StartMetroButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+            <Setter Property="Background" Value="#EEEEEEEE"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="BorderThickness" Value="4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Ellipse Name ="OuterRing" Width ="150" Height ="50" Fill ="DarkRed"/>
+                            <Ellipse Name ="InnerRing" Width ="145" Height ="45" Fill ="#FFE00404"/>
+                            <ContentPresenter 
+                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                 Margin="{TemplateBinding Padding}" 
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                 RecognizesAccessKey="True"  />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="OpacityMask" Value="#AA888888"/>
+                                <Setter Property="Margin" Value="2 1" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Foreground" Value="Gainsboro"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </t:HeaderedControl.Resources>
     <ScrollViewer>
     <Grid Background="Gainsboro">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -87,20 +125,21 @@
             </StackPanel>
             <TextBlock Grid.Row="2" Text="{Binding Error, ElementName=rmCntrl}" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding HasError, ElementName=rmCntrl}"  />
         </Grid>
-        <Grid Grid.Row="1" Background="Gainsboro" Margin="10,0,10,0" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="&#xE11A;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20"/>
-            <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1"  Background="#FFE8E7E7" GotFocus="TextBox_GotFocus"/>
+            <Button Grid.Row="1" Content="В Бой!" Grid.ColumnSpan="2" Style="{StaticResource StartMetroButton}" Foreground="Black" FontWeight="Bold" Visibility="{Binding IsOwner, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}" Click="StartRoomClick" />
+            <Grid Grid.Row="2" Background="Gainsboro" Margin="10,0,10,0" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="&#xE11A;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}" />
+                <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1"  Background="#FFE8E7E7" GotFocus="TextBox_GotFocus" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}"/>
         </Grid>
-        <StackPanel Grid.Row="2" Height="30" Orientation="Horizontal" Background="Gainsboro" Margin="10,0,10,0" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
+        <StackPanel Grid.Row="3" Height="30" Orientation="Horizontal" Background="Gainsboro" Margin="10,0,10,0" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
             <Label Content="Имя" Width="100"/>
             <Label Content="Владелец" Width="100"/>
         </StackPanel>
         
-            <ListBox x:Name="RmList" Grid.Row="3" Background="Gainsboro" ItemsSource="{Binding Rooms, ElementName=rmCntrl}"  SelectedItem="{Binding Selected, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}" Margin="10,0,10,10">
+            <ListBox x:Name="RmList" Grid.Row="4" Background="Gainsboro" ItemsSource="{Binding Rooms, ElementName=rmCntrl}"  SelectedItem="{Binding Selected, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}" Margin="10,0,10,10">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>

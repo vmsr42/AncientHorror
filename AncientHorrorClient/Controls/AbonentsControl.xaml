@@ -6,6 +6,57 @@
              xmlns:t="clr-namespace:AncientHorrorClient.Controls"
              mc:Ignorable="d" Tag="Абоненты"
              d:DesignHeight="300" d:DesignWidth="300" x:Name="abnCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
+    <t:HeaderedControl.Resources>
+    <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MenuItem}, ResourceId=SubmenuItemTemplateKey}"
+           TargetType="{x:Type MenuItem}">
+      <Border Name="Bd"
+        Background="{TemplateBinding Background}"
+        BorderThickness="{TemplateBinding BorderThickness}"
+        BorderBrush="{TemplateBinding BorderBrush}">
+        <Grid>
+          <ContentPresenter x:Name="Icon" Width="0"
+                 Margin="0"
+                 VerticalAlignment="Center"
+                 ContentSource=""/>
+          <ContentPresenter 
+                 ContentSource="Header"
+                 Margin="{TemplateBinding Padding}"
+                 RecognizesAccessKey="True"/>
+        </Grid>
+      </Border>
+      <ControlTemplate.Triggers>
+        <Trigger Property="Icon"
+           Value="{x:Null}">
+          <Setter TargetName="Icon"
+            Property="Visibility"
+            Value="Collapsed"/>
+        </Trigger>
+                <Trigger Property="IsChecked"
+           Value="true">
+                    <Setter TargetName="Icon"
+            Property="Visibility"
+            Value="Collapsed"/>
+        </Trigger>
+        <Trigger Property="IsHighlighted"
+           Value="true">
+          <Setter TargetName="Bd"
+            Property="Background"
+            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+          <Setter Property="Foreground"
+            Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+        </Trigger>
+        <Trigger Property="IsEnabled"
+           Value="false">
+          <Setter Property="Foreground"
+            Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+        </Trigger>
+      </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+
+
+    </t:HeaderedControl.Resources>
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -27,11 +78,11 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ContextMenu>
-                <ContextMenu ItemsSource="{Binding Path=PlacementTarget.Tag.AbnCommands, RelativeSource={RelativeSource Self}}"  Visibility="{Binding Path=PlacementTarget.Tag.CanSeeContextMenu, RelativeSource={RelativeSource Self}}">
+                <ContextMenu ItemsSource="{Binding Path=PlacementTarget.Tag.AbnCommands, RelativeSource={RelativeSource Self}}"  Visibility="{Binding Path=PlacementTarget.Tag.CanSeeContextMenu, RelativeSource={RelativeSource Self}}" Background="Silver" >
                     <ContextMenu.ItemTemplate>
                         <DataTemplate>
-                            <MenuItem Header="{Binding CmdName}" Tag="{Binding}" Click="MenuItemClick" IsEnabled="{Binding CanDo}" />
-                        </DataTemplate>
+                                <MenuItem Header="{Binding CmdName}" Tag="{Binding}" Click="MenuItemClick" IsEnabled="{Binding CanDo}" Background="Gainsboro" />
+                            </DataTemplate>
                     </ContextMenu.ItemTemplate>
                     
                 </ContextMenu>
