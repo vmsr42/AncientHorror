@@ -16,6 +16,8 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
         public String Name { get; set; }
         [DataMember]
         public string Password { get; set; }
+        [DataMember]
+        public int Capability { get; set; }
         public CreateRoomMessage() : base(new DataContractSerializer(typeof(CreateRoomMessage)), true) { }
         protected override TransportContainer TKCreation(string text)
         {
@@ -24,9 +26,10 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
         }
         protected override void CopyMessageField(BaseMessage msg)
         {
-            AuthorizationMessage copymsg = (AuthorizationMessage)msg;
-            this.Name = copymsg.Login;
+            CreateRoomMessage copymsg = (CreateRoomMessage)msg;
+            this.Name = copymsg.Name;
             this.Password = copymsg.Password;
+            this.Capability = copymsg.Capability;
         }
         public override BaseMessage GetInnerMessage()
         {

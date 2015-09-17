@@ -13,8 +13,8 @@ namespace AncientHorror.Server
     public class GameRoom: Room
     {
         private String password;
-        public GameRoom(int id,String name, string pass, GameAbonentInfo owner)
-            : base(8,id,name, owner)
+        public GameRoom(int id,String name, string pass, GameAbonentInfo owner, int capability)
+            : base(capability, id, name, owner)
         {
             this.password = pass;
         }
@@ -48,21 +48,23 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg, GetGameRoomInfo());
+                            ab.SendMessage(smsg);
                         }
-                        if (!done)
-                        {
-                            ServerInfoErrorMessage error = new ServerInfoErrorMessage() { Error = "Не удалось покинуть комнату...мухаха" };
-                            var smsg = error.GetTC();
-                            ab.SendMessage(smsg, GetGameRoomInfo());
-                        }
+                        SendRoomStatusMessage();
+                        Program.Lobby.SendRoomStatusMessage();
                         break;
                     }
                 case AbonentsCommandType.Exit:
                     {
+                        this.RemoveAbonent(ab);
                         ab.Gamer.Name = "Guest" + ab.Gamer.Id;
                         ab.Gamer.UserId = 0;
                         ab.Status = AbonentStatusEnum.Disconnected;
+                        if (ab.Gamer.Id == this.Owner.Id)
+                        {
+                            AfterRemoveOwner();
+                        }
+                        SendRoomStatusMessage();
                         break;
                     }
                 case AbonentsCommandType.StartRoom:
@@ -72,7 +74,7 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg, GetGameRoomInfo());
+                            ab.SendMessage(smsg);
                         }
                         break;
                     }
@@ -93,8 +95,10 @@ namespace AncientHorror.Server
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
-                            ab.SendMessage(smsg, GetGameRoomInfo());
+                            ab.SendMessage(smsg);
                         }
+                        SendRoomStatusMessage();
+                        Program.Lobby.SendRoomStatusMessage();
                         break;
                     }
  
@@ -107,6 +111,7 @@ namespace AncientHorror.Server
                 this.RemoveAbonent(remab);
                 Program.Lobby.AddAbonent(remab);
             }
+            Program.Lobby.SendRoomStatusMessage();
             Program.Rooms.Remove(this);
         }
 

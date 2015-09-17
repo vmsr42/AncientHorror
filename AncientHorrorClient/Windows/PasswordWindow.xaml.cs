@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AncientHorrorShared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,26 +14,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace AncientHorrorClient.Controls
+namespace AncientHorrorClient.Windows
 {
     /// <summary>
     /// Логика взаимодействия для CreateRoomWindow.xaml
     /// </summary>
-    public partial class CreateRoomWindow : Window, INotifyPropertyChanged
+    public partial class PasswordWindow : Window, INotifyPropertyChanged
     {
         public bool Result { get; set; }
-        public String Error { get; set; }
-        public String RoomName { get; set; }
-        public String Capability { get; set; }
-        public String Password { get; set; }
-        public CreateRoomWindow()
+        private GameRoomInfo room;
+        public GameRoomInfo Room
         {
+            get
+            {
+                return room;
+            }
+        }
+        public String RoomName { get; set; }
+        public String Password { get; set; }
+        public PasswordWindow(GameRoomInfo room)
+        {
+            this.room = room;
             var parent = Global.CurrentWindow;
             double top = parent.Top + parent.ActualHeight / 2-150;
             double left = parent.Left + parent.ActualWidth / 2-150;
             this.Top = top;
             this.Left = left;
-            Capability = "8";
+            Password = String.Empty;
             InitializeComponent();
         }
         #region INotifyPropertyChanged
@@ -49,31 +57,8 @@ namespace AncientHorrorClient.Controls
 
         private void OkClick(object sender, RoutedEventArgs e)
         {
-            bool check = true;
-            if (String.IsNullOrWhiteSpace(RoomName))
-            {
-                Error = "Не правильное имя комнаты";
-                check = false;
-            }
-            int capa = 8;
-            if (!int.TryParse(Capability, out capa))
-            {
-                Capability = capa.ToString();
-                Error = "Не правильное значение вместительности комнаты";
-                check = false;
-            }
-            if (check&&capa<1)
-            {
-                Error = "Вместительность не может быть меньше 1";
-                check = false;
-            }
-            if (check)
-            {
                 Result = true;
                 this.Close();
-            }
-            else
-                OnPropertyChanged("Error");
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)

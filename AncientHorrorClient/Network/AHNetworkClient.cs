@@ -137,6 +137,19 @@ namespace AncientHorrorClient.Network
                     tc.Room = Room;
                     string utf8 = tc.UTFSerialize();
                     byte[] data = Encoding.UTF8.GetBytes(utf8);
+
+                    var testtc = new TransportContainer();
+
+                    testtc.UTFDeSerialize(utf8);
+                    if (testtc.Type== TCTypes.AbonentCommand)
+                    {
+                        var acmsg = (AbonentsCommandMessage)testtc.GetInnerMessage();
+                        if (acmsg.Type== AbonentsCommandType.ExitRoom)
+                        {
+                            var crmsg = (ExitRoomMessage)acmsg.GetInnerMessage();
+                        }
+                    }
+
                     client.Send(data);
                     if (msg.NeedConfirm)
                     {

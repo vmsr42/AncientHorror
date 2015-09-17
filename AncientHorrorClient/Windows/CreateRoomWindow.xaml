@@ -1,7 +1,7 @@
-﻿<Window x:Class="AncientHorrorClient.Controls.CreateRoomWindow"
+﻿<Window x:Class="AncientHorrorClient.Windows.CreateRoomWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="CreateRoomWindow" Height="300" Width="300" WindowStyle="None" AllowsTransparency="True" x:Name="crRoomWind">
+        Title="CreateRoomWindow" Height="340" Width="340" WindowStyle="None" AllowsTransparency="True" x:Name="crRoomWind">
     <Window.Resources>
         <Style    x:Key="ButtonFocusVisual">
             <Setter Property="Control.Template">
@@ -67,6 +67,7 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid Grid.Row="1" >
@@ -93,11 +94,12 @@
                 <TextBlock Grid.Column="0" Text="Пароль: " VerticalAlignment="Center"  Foreground="DarkGreen" FontSize="14"/>
                 <TextBox Grid.Column="1" Text="{Binding Password, ElementName=crRoomWind}" Background="#FFE8E7E7" VerticalContentAlignment="Center" Margin="2" />
             </Grid>
+            <TextBlock Grid.Row="4" Text="{Binding Error, ElementName=crRoomWind}" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding HasError, ElementName=crRoomWind}"  />
         </Grid>
         <DockPanel Grid.Row="2" HorizontalAlignment="Center" >
-            <Button Content="OK" Width="100" Style="{StaticResource IncreasedMetroButton}" Click="OkClick"/>
+            <Button Content="Создать" Width="100" Style="{StaticResource IncreasedMetroButton}" Click="OkClick"/>
             <TextBlock Width="20"/>
-            <Button Content="Cancel" Width="100" Style="{StaticResource IncreasedMetroButton}" Click="CancelClick"/>
+            <Button Content="Отменить" Width="100" Style="{StaticResource IncreasedMetroButton}" Click="CancelClick"/>
         </DockPanel>
     </Grid>
 </Window>

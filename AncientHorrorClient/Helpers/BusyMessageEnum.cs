@@ -14,6 +14,13 @@ namespace AncientHorrorClient.Helpers
         [Description("Соединяемся с сервером")]
         Connecting,
         [Description("Идет авторизация")]
-        Authorizing
+        Authorizing,
+        [Description("Идет создание комнаты")]
+        CreatingRoom,
+        [Description("Присоединяемся к комнате")]
+        JoiningRoom,
+        [Description("Выходим из комнаты")]
+        ExitingRoom
+
     }
 }

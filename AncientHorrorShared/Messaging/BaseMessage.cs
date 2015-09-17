@@ -39,8 +39,9 @@ namespace AncientHorrorShared.Messaging
         public void UTFDeSerialize(String text)
         {
             char[] removed = new char[1];
-            removed[0]= (char)0;
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(text.Trim(removed))))
+            removed[0] = (char)0;
+            text = text.Trim(removed);
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(text)))
             {
                 try
                 {

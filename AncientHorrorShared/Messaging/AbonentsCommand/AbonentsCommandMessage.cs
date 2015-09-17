@@ -48,7 +48,15 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
                 case AbonentsCommandType.CreateRoom:
                     {
                         CreateRoomMessage msg = new CreateRoomMessage();
-                        msg.UTFDeSerialize(this.Message);
+                        try
+                        {
+                            msg.UTFDeSerialize(this.Message);
+                            return msg;
+                        }
+                        catch(Exception ex)
+                        {
+
+                        }
                         return msg;
                     }
                 case AbonentsCommandType.RequestRoomInfo:

@@ -19,6 +19,8 @@ using AncientHorrorClient.Controls;
 using AncientHorrorShared;
 using AncientHorrorClient.Helpers;
 using AncientHorrorClient.Windows;
+using AncientHorrorShared.Messaging.AbonentsCommand;
+using AncientHorrorClient.Network;
 
 namespace AncientHorrorClient.Controls
 {
@@ -27,6 +29,36 @@ namespace AncientHorrorClient.Controls
     /// </summary>
     public partial class RoomsControl : HeaderedControl
     {
+        public string OwnerName
+        {
+            get
+            {
+                if (Room.Owner == null)
+                    return String.Empty;
+                return Room.Owner.Name;
+            }
+        }
+        public int ButtonsRow
+        {
+            get
+            {
+                if (!Room.IsLobby)
+                    return 1;
+                else
+                    return 4;
+            }
+        }
+        public String Error { get; set; }
+        public Visibility HasError
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Error))
+                    return Visibility.Collapsed;
+                else
+                    return Visibility.Visible;
+            }
+        }
         public bool IsJoinRVisible
         {
             get
@@ -121,12 +153,15 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
         private void NetworkClient_RoomChanged(GameRoomInfo ab)
         {
             OnPropertyChanged("Room");
+            OnPropertyChanged("OwnerName");
             OnPropertyChanged("IsJoinRVisible");
             OnPropertyChanged("IsCreateRVisible");
+            OnPropertyChanged("ButtonsRow");          
         }
 
         private void CreateRoomClick(object sender, RoutedEventArgs e)
         {
+            Error = String.Empty;
             if (IsCreateRVisible)
             {
                 CreateRoomWindow crw = new CreateRoomWindow();
@@ -137,21 +172,74 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
 
         private void JoinRoomClick(object sender, RoutedEventArgs e)
         {
+            Error = String.Empty;
             if (IsJoinRVisible)
             {
-
+                if (Selected.HavePassword)
+                {
+                    PasswordWindow passWind = new PasswordWindow(selected);
+                    passWind.Closed+=passWind_Closed;
+                    passWind.ShowDialog();
+                }
+                else
+                {
+                    SendJoinMessage(Selected.Id, String.Empty);
+                }
             }
         }
 
-        private void crw_Closed(object sender, EventArgs e)
+        private void passWind_Closed(object sender, EventArgs e)
+        {
+            PasswordWindow passWind = (PasswordWindow)sender;
+            if (passWind.Result)
+            {
+                SendJoinMessage(passWind.Room.Id, passWind.Password);
+            }
+        }
+        private async void SendJoinMessage(int roomId, String password)
+        {
+            JoinRoomMessage jrm = new JoinRoomMessage() { Password = password, RoomId = roomId };
+            Global.Status = BusyMessageEnum.JoiningRoom;
+            var answer = await Global.NetworkClient.SendMessage(jrm);
+            if (!answer.Result)
+                Error = answer.Message;
+            OnPropertyChanged("Error");
+            OnPropertyChanged("HasError");
+            Global.Status = BusyMessageEnum.ExitingRoom;
+        }
+        private async void crw_Closed(object sender, EventArgs e)
         {
             CreateRoomWindow crw = (CreateRoomWindow)sender;
-            
+            CreateRoomMessage crm = new CreateRoomMessage();
+            if (crw.Result==true)
+            {
+                crm.Name = crw.RoomName;
+                crm.Password = crw.Password;
+                crm.Capability = int.Parse(crw.Capability);
+                Global.Status = BusyMessageEnum.CreatingRoom;
+                ClientAnswer answer = await Global.NetworkClient.SendMessage(crm);
+                Global.Status = BusyMessageEnum.None;
+                if (!answer.Result)
+                    Error = answer.Message;
+                    
+            }
+            OnPropertyChanged("Error");
+            OnPropertyChanged("HasError");
+
         }
 
-        private void ExitRoomClick(object sender, RoutedEventArgs e)
+        private async void ExitRoomClick(object sender, RoutedEventArgs e)
         {
-
+            Error = String.Empty;
+            if (!Room.IsLobby)
+            {
+                ExitRoomMessage em = new ExitRoomMessage();
+                Global.Status = BusyMessageEnum.ExitingRoom;
+                await Global.NetworkClient.SendMessage(em);
+                Global.Status = BusyMessageEnum.None;
+            }
+            OnPropertyChanged("Error");
+            OnPropertyChanged("HasError");
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)

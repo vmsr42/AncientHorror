@@ -49,7 +49,7 @@ namespace AncientHorrorShared
         }
         public override int GetHashCode()
         {
-            return this.Id;
+            return (this.Id+"_"+this.UserId).GetHashCode();
         }
         public override bool Equals(object obj)
         {

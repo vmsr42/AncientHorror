@@ -12,7 +12,7 @@ namespace AncientHorrorShared.Messaging.AbonentsCommand
     [DataContract]
     public class ExitRoomMessage: BaseMessage
     {
-        public ExitRoomMessage() : base(new DataContractSerializer(typeof(ExitRoomMessage)), true) { }
+        public ExitRoomMessage() : base(new DataContractSerializer(typeof(ExitRoomMessage)), false) { }
         protected override TransportContainer TKCreation(string text)
         {
             var msg = new AbonentsCommandMessage() { Message = text, Type = AbonentsCommandType.ExitRoom, MsgId = this.MsgId };

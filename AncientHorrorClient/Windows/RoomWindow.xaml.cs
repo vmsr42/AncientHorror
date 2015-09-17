@@ -140,7 +140,7 @@ namespace AncientHorrorClient.Windows
 
         private void NetworkClient_AbonentChanged(GameAbonentInfo ab)
         {
-            if (Abonent.Id > 0)
+            if (Abonent.Id > 0&&ab!=null)
                 Messages.Add(new ChatMessage(){ Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "сменил имя на " + ab.Name });
             Abonent = ab;    
         }
