@@ -6,7 +6,7 @@
              xmlns:t="clr-namespace:AncientHorrorClient.Controls"
              xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.Controls.RoomsControl"
              mc:Ignorable="d" Tag="{Binding Room.Name, ElementName=rmCntrl}"
-             d:DesignHeight="600" d:DesignWidth="600" x:Name="rmCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
+             d:DesignHeight="600" d:DesignWidth="600" x:Name="rmCntrl" >
     <t:HeaderedControl.Resources>
         <Converters:CapabilityVisibilityConverter x:Key="CapabilityVisibilityConverter"/>
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -33,8 +33,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Ellipse Name ="OuterRing" Width ="150" Height ="38" Fill ="DarkGreen"/>
-                            <Ellipse Name ="InnerRing" Width ="148" Height ="36" Fill ="MintCream"/>
+                            <Ellipse Name ="OuterRing" Width ="150" Height ="34" Fill ="DarkGreen"/>
+                            <Ellipse Name ="InnerRing" Width ="148" Height ="32" Fill ="MintCream"/>
                             <ContentPresenter 
                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                  Margin="{TemplateBinding Padding}" 
@@ -59,30 +59,31 @@
             </Setter>
         </Style>
     </t:HeaderedControl.Resources>
+    <ScrollViewer>
     <Grid Background="Gainsboro">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel HorizontalAlignment="Left" Margin="10,2,10,0" Orientation="Horizontal">
-                <Label Content="Владелец:   "  FontSize="20"/>
-                <TextBlock  Text="{Binding OwnerName, ElementName=rmCntrl}"  FontFamily="Segoe UI Symbol" FontSize="18" VerticalAlignment="Center"/>
+            <StackPanel HorizontalAlignment="Left" Margin="10,0,10,0" Orientation="Horizontal">
+                <Label Content="Владелец:   "  FontSize="16"/>
+                <TextBlock  Text="{Binding OwnerName, ElementName=rmCntrl}"  FontFamily="Segoe UI Symbol" FontSize="14" VerticalAlignment="Center"/>
             </StackPanel>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,2,10,0">
-                <Label Content="Количество абонентов:   " FontSize="20" />
-                <TextBlock  Text="{Binding Room.Capacity, ElementName=rmCntrl}"  FontFamily="Segoe UI Symbol" FontSize="18" VerticalAlignment="Center"/>
-                <TextBlock Text="/"  FontFamily="Segoe UI Symbol" FontSize="18" VerticalAlignment="Center"/>
-                <TextBlock  Text="{Binding Room.Capability, ElementName=rmCntrl}"  FontFamily="Segoe UI Symbol" FontSize="18" Visibility="{Binding Room.Capability, ElementName=rmCntrl, Converter={StaticResource CapabilityVisibilityConverter}}" VerticalAlignment="Center"/>
-                <TextBlock  Text="&#x221E;"  FontFamily="Segoe UI Symbol" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Room.Capability, ElementName=rmCntrl, Converter={StaticResource CapabilityVisibilityConverter}, ConverterParameter=false}"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,10,0">
+                <Label Content="Количество абонентов:   " FontSize="16" />
+                <TextBlock  Text="{Binding Room.Capacity, ElementName=rmCntrl}"  FontFamily="Segoe UI Symbol" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Text="/"  FontFamily="Segoe UI Symbol" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock  Text="{Binding Room.Capability, ElementName=rmCntrl}"  FontFamily="Segoe UI Symbol" FontSize="14" Visibility="{Binding Room.Capability, ElementName=rmCntrl, Converter={StaticResource CapabilityVisibilityConverter}}" VerticalAlignment="Center"/>
+                <TextBlock  Text="&#x221E;"  FontFamily="Segoe UI Symbol" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Room.Capability, ElementName=rmCntrl, Converter={StaticResource CapabilityVisibilityConverter}, ConverterParameter=false}"/>
             </StackPanel>
             <TextBlock Grid.Row="2" Text="{Binding Error, ElementName=rmCntrl}" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding HasError, ElementName=rmCntrl}"  />
         </Grid>
@@ -94,12 +95,12 @@
             <TextBlock Text="&#xE11A;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20"/>
             <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1"  Background="#FFE8E7E7" GotFocus="TextBox_GotFocus"/>
         </Grid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="Gainsboro" Margin="10,2,10,0" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
+        <StackPanel Grid.Row="2" Height="30" Orientation="Horizontal" Background="Gainsboro" Margin="10,0,10,0" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
             <Label Content="Имя" Width="100"/>
             <Label Content="Владелец" Width="100"/>
         </StackPanel>
-        <ScrollViewer Grid.Row="3" Margin="10,0,10,10" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}">
-            <ListBox x:Name="RmList"  Background="Gainsboro" ItemsSource="{Binding Rooms, ElementName=rmCntrl}"  SelectedItem="{Binding Selected, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" >
+        
+            <ListBox x:Name="RmList" Grid.Row="3" Background="Gainsboro" ItemsSource="{Binding Rooms, ElementName=rmCntrl}"  SelectedItem="{Binding Selected, ElementName=rmCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rmCntrl, Mode=OneWay}" Margin="10,0,10,10">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -115,11 +116,11 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </ScrollViewer>
-        <DockPanel Grid.Row="{Binding ButtonsRow, ElementName=rmCntrl}" Background="Gainsboro" HorizontalAlignment="Center" Margin="10,2,10,10" >
+        <DockPanel Grid.Row="{Binding ButtonsRow, ElementName=rmCntrl}" Background="Gainsboro" HorizontalAlignment="Center" Margin="10,0,10,0" Height="38" >
             <Button Content="Создать комнату" Click="CreateRoomClick" Visibility="{Binding IsCreateRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource IncreasedMetroButton}"/>
             <Button Content="Присоединиться" Click="JoinRoomClick" Visibility="{Binding IsJoinRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource IncreasedMetroButton}"/>
             <Button Content="Выйти из комнаты" Click="ExitRoomClick" Style="{StaticResource IncreasedMetroButton}"  Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, ElementName=rmCntrl, Mode=OneWay}"/>
         </DockPanel>
     </Grid>
+    </ScrollViewer>
 </t:HeaderedControl>
