@@ -85,7 +85,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Commands.cs" />
     <Compile Include="Commands\RemoveFromChatCmd.cs" />
+    <Compile Include="Converters\BMEToBoolConverter.cs" />
     <Compile Include="Windows\PasswordWindow.xaml.cs">
       <DependentUpon>PasswordWindow.xaml</DependentUpon>
     </Compile>

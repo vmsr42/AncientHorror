@@ -63,22 +63,11 @@ namespace AncientHorrorClient.Controls
                 if (value!=selected)
                 {
                     selected = value;
-                    foreach (var cmd in AbnCommands)
-                        cmd.Abonent = selected;
                     OnPropertyChanged("Selected");
-                    OnPropertyChanged("CanSeeContextMenu");
                 }
             }
         }
-        public Visibility CanSeeContextMenu
-        {
-            get 
-            {
-                if (Selected == null)
-                    return Visibility.Collapsed;
-                return Visibility.Visible;
-            }
-        }
+
         public static readonly DependencyProperty AbonentsProperty =
 DependencyProperty.Register("Abonents", typeof(ObservableCollection<GameAbonentInfo>), typeof(AbonentsControl));
         public ObservableCollection<GameAbonentInfo> Abonents
@@ -96,20 +85,6 @@ DependencyProperty.Register("Abonents", typeof(ObservableCollection<GameAbonentI
         {
             InitializeComponent();
         }
-        private List<InterfaceCommand> commands ;
-        public List<InterfaceCommand> AbnCommands
-        {
-            get
-            {
-                if (commands==null)
-                {
-                    commands = new List<InterfaceCommand>();
-                    commands.Add(new AddAbonentToChatCmd());
-                    commands.Add(new KickUserCmd());
-                }
-                return commands;
-            }
-        }
 
         private void MenuItemClick(object sender, RoutedEventArgs e)
         {
@@ -121,7 +96,7 @@ DependencyProperty.Register("Abonents", typeof(ObservableCollection<GameAbonentI
             }
         }
 
-        private void ListboxClicked(object sender, MouseButtonEventArgs e)
+       private void ListboxClicked(object sender, MouseButtonEventArgs e)
         {
             if (sender!=null&&Selected!=null)
             {
@@ -142,7 +117,7 @@ DependencyProperty.Register("Abonents", typeof(ObservableCollection<GameAbonentI
         }
 
 
-            
+          
 
 
 

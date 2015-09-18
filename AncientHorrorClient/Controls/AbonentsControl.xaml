@@ -1,60 +1,61 @@
-﻿<t:HeaderedControl x:Class="AncientHorrorClient.Controls.AbonentsControl"
+﻿<t:HeaderedControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:t="clr-namespace:AncientHorrorClient.Controls"
+             xmlns:cmd ="clr-namespace:AncientHorrorClient.Commands"
+             xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.Controls.AbonentsControl"
              mc:Ignorable="d" Tag="Абоненты"
              d:DesignHeight="300" d:DesignWidth="300" x:Name="abnCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
     <t:HeaderedControl.Resources>
-    <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MenuItem}, ResourceId=SubmenuItemTemplateKey}"
-           TargetType="{x:Type MenuItem}">
-      <Border Name="Bd"
-        Background="{TemplateBinding Background}"
-        BorderThickness="{TemplateBinding BorderThickness}"
-        BorderBrush="{TemplateBinding BorderBrush}">
-        <Grid>
-          <ContentPresenter x:Name="Icon" Width="0"
-                 Margin="0"
-                 VerticalAlignment="Center"
-                 ContentSource=""/>
-          <ContentPresenter 
-                 ContentSource="Header"
-                 Margin="{TemplateBinding Padding}"
-                 RecognizesAccessKey="True"/>
-        </Grid>
-      </Border>
-      <ControlTemplate.Triggers>
-        <Trigger Property="Icon"
-           Value="{x:Null}">
-          <Setter TargetName="Icon"
-            Property="Visibility"
-            Value="Collapsed"/>
-        </Trigger>
-                <Trigger Property="IsChecked"
-           Value="true">
-                    <Setter TargetName="Icon"
-            Property="Visibility"
-            Value="Collapsed"/>
-        </Trigger>
-        <Trigger Property="IsHighlighted"
-           Value="true">
-          <Setter TargetName="Bd"
-            Property="Background"
-            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-          <Setter Property="Foreground"
-            Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-        </Trigger>
-        <Trigger Property="IsEnabled"
-           Value="false">
-          <Setter Property="Foreground"
-            Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-        </Trigger>
-      </ControlTemplate.Triggers>
-    </ControlTemplate>
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style x:Key="SimpleMenuStyle" TargetType="{x:Type ContextMenu}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Grid Background="Silver">
+                            <ItemsPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
 
+        <ControlTemplate 
+  x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}" 
+  TargetType="{x:Type MenuItem}">
+            <Border x:Name="Border">
+                <ContentPresenter Height="25" VerticalAlignment="Center"
+        			x:Name="HeaderHost"
+        			ContentSource="Header"
+        			RecognizesAccessKey="True"/>
 
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsHighlighted" Value="true">
+                    <Setter TargetName="Border" Property="Background"
+              Value="Gainsboro"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+
+        <!-- MenuItem Style -->
+
+        <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Style.Triggers>
+                <Trigger Property="Role" Value="SubmenuItem">
+                    <Setter Property="Background" Value="Silver"/>
+                    <Setter Property="Margin" Value="0"/>
+
+                    <Setter Property="Template"
+              Value="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
     </t:HeaderedControl.Resources>
     <Grid >
@@ -67,28 +68,25 @@
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="&#57626;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20"/>
-            <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=abnCntrl}" Margin="1"  Background="#FFE8E7E7"/>
+            <TextBlock Text="&#xE11A;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="20"/>
+            <TextBox Grid.Column="1" FontSize="14" Text="{Binding FilterText, ElementName=abnCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1"  Background="#FFE8E7E7"/>
         </Grid>
         <ScrollViewer Grid.Row="1">
-        <ListBox x:Name="AbnList"  Background="Gainsboro" ItemsSource="{Binding Abonents,ElementName=abnCntrl}" Tag="{Binding ElementName=abnCntrl}" SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=abnCntrl}" SelectionMode="Single" MouseDown="ListboxClicked" >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding Name}" FontSize="14" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ContextMenu>
-                <ContextMenu ItemsSource="{Binding Path=PlacementTarget.Tag.AbnCommands, RelativeSource={RelativeSource Self}}"  Visibility="{Binding Path=PlacementTarget.Tag.CanSeeContextMenu, RelativeSource={RelativeSource Self}}" Background="Silver" >
-                    <ContextMenu.ItemTemplate>
-                        <DataTemplate>
-                                <MenuItem Header="{Binding CmdName}" Tag="{Binding}" Click="MenuItemClick" IsEnabled="{Binding CanDo}" Background="Gainsboro" />
-                            </DataTemplate>
-                    </ContextMenu.ItemTemplate>
-                    
-                </ContextMenu>
+            <ListBox x:Name="AbnList"  Background="Gainsboro" ItemsSource="{Binding Abonents, ElementName=abnCntrl}" Tag="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" SelectedItem="{Binding Selected, ElementName=abnCntrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" MouseDown="ListboxClicked" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}" FontSize="14" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ContextMenu>
+                    <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"  Background="Silver" ClipToBounds="True" Style="{StaticResource SimpleMenuStyle}"   >
+                        <MenuItem Width="120" Header="Написать" Command="cmd:Commands.AddToChat" CommandParameter="{Binding}" Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"/>
+                        <MenuItem Width="120" Header="Выкинуть из комнаты" Command="cmd:Commands.KickUser" CommandParameter="{Binding}"  Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"/>
 
-            </ListBox.ContextMenu>
-        </ListBox>
+                    </ContextMenu>
+
+                </ListBox.ContextMenu>
+            </ListBox>
         </ScrollViewer>
     </Grid>
 </t:HeaderedControl>

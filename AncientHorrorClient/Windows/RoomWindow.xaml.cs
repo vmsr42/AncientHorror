@@ -1,5 +1,6 @@
 ﻿using AncientHorrorShared;
 using AncientHorrorShared.Messaging;
+using AncientHorrorShared.Messaging.AbonentsCommand;
 using AncientHorrorShared.Messaging.InfoMessage;
 using System;
 using System.Collections.Generic;
@@ -93,6 +94,8 @@ namespace AncientHorrorClient.Windows
             Abonents.CollectionChanged+=Abonents_CollectionChanged;
             InitializeComponent();
         }
+
+
 
         private void Abonents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -237,5 +240,38 @@ namespace AncientHorrorClient.Windows
         {
             Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату" });
         }
+
+        private void AddToChatCan(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.Parameter is GameAbonentInfo)
+                e.CanExecute = true;
+            else
+                e.CanExecute = false;
+        }
+
+        private void AddToChatExec(object sender, ExecutedRoutedEventArgs e)
+        {
+            GameAbonentInfo ab = e.Parameter as GameAbonentInfo;
+            this.Chat.AddChanel(ab);
+        }
+        private void KickUserCan(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (Global.NetworkClient.Room.Owner == null)
+                e.CanExecute = false;
+            else if (Global.NetworkClient.Abonent.Id != Global.NetworkClient.Room.Owner.Id)
+                e.CanExecute = false;
+            else if (e.Parameter is GameAbonentInfo)
+                e.CanExecute = true;
+            else
+                e.CanExecute = false;
+        }
+
+        private async void KickUserExec(object sender, ExecutedRoutedEventArgs e)
+        {
+            GameAbonentInfo ab = e.Parameter as GameAbonentInfo;
+            KickUserMessage kum = new KickUserMessage() { UserId = ab.UserId };
+            await Global.NetworkClient.SendMessage(kum);
+        }
+        
     }
 }
