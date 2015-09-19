@@ -5,59 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:t="clr-namespace:AncientHorrorClient.Controls"
              xmlns:cmd ="clr-namespace:AncientHorrorClient.Commands"
-             xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.Controls.AbonentsControl"
+             x:Class="AncientHorrorClient.Controls.AbonentsControl"
              mc:Ignorable="d" Tag="Абоненты"
              d:DesignHeight="300" d:DesignWidth="300" x:Name="abnCntrl" ExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Visible"  Reverse="True">
-    <t:HeaderedControl.Resources>
-        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <Style x:Key="SimpleMenuStyle" TargetType="{x:Type ContextMenu}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ContextMenu}">
-                        <Grid Background="Silver">
-                            <ItemsPresenter />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-        <ControlTemplate 
-  x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}" 
-  TargetType="{x:Type MenuItem}">
-            <Border x:Name="Border">
-                <ContentPresenter Height="25" VerticalAlignment="Center"
-        			x:Name="HeaderHost"
-        			ContentSource="Header"
-        			RecognizesAccessKey="True"/>
-
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsHighlighted" Value="true">
-                    <Setter TargetName="Border" Property="Background"
-              Value="Gainsboro"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-
-        <!-- MenuItem Style -->
-
-        <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Style.Triggers>
-                <Trigger Property="Role" Value="SubmenuItem">
-                    <Setter Property="Background" Value="Silver"/>
-                    <Setter Property="Margin" Value="0"/>
-
-                    <Setter Property="Template"
-              Value="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-    </t:HeaderedControl.Resources>
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -80,11 +30,9 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
                     <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"  Background="Silver" ClipToBounds="True" Style="{StaticResource SimpleMenuStyle}"   >
-                        <MenuItem Width="120" Header="Написать" Command="cmd:Commands.AddToChat" CommandParameter="{Binding}" Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"/>
-                        <MenuItem Width="120" Header="Выкинуть из комнаты" Command="cmd:Commands.KickUser" CommandParameter="{Binding}"  Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"/>
-
+                        <MenuItem Width="120" Header="Написать" Command="cmd:Commands.AddToChat" CommandParameter="{Binding}" Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}" Style="{StaticResource SimpleMenuItemStyle}"/>
+                        <MenuItem Width="120" Header="Выкинуть из комнаты" Command="cmd:Commands.KickUser" CommandParameter="{Binding}"  Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}" Style="{StaticResource SimpleMenuItemStyle}"/>
                     </ContextMenu>
-
                 </ListBox.ContextMenu>
             </ListBox>
         </ScrollViewer>

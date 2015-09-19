@@ -86,7 +86,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\Commands.cs" />
-    <Compile Include="Commands\RemoveFromChatCmd.cs" />
     <Compile Include="Converters\BMEToBoolConverter.cs" />
     <Compile Include="Windows\PasswordWindow.xaml.cs">
       <DependentUpon>PasswordWindow.xaml</DependentUpon>
@@ -105,11 +104,7 @@
     <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Helpers\BusyMessageEnum.cs" />
     <Compile Include="Windows\BaseWindow.cs" />
-    <Compile Include="ChatMessageType.cs" />
     <Compile Include="ChatMessage.cs" />
-    <Compile Include="Commands\AddAbonentToChatCmd.cs" />
-    <Compile Include="Commands\InterfaceCommand.cs" />
-    <Compile Include="Commands\KickUserCmd.cs" />
     <Compile Include="Windows\ConnectWindow.xaml.cs">
       <DependentUpon>ConnectWindow.xaml</DependentUpon>
     </Compile>
@@ -125,6 +120,10 @@
     <Compile Include="Test.cs" />
     <Compile Include="WaveCanvas.cs" />
     <Compile Include="Controls\HeaderedControl.cs" />
+    <Page Include="Themes\ApStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\PasswordWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

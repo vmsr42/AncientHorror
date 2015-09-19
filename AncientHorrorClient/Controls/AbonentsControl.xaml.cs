@@ -25,7 +25,7 @@ namespace AncientHorrorClient.Controls
     /// </summary>
     public partial class AbonentsControl : HeaderedControl
     {
-
+        #region Свойства
         private String filtertext = String.Empty;
         public String FilterText
         {
@@ -81,20 +81,12 @@ DependencyProperty.Register("Abonents", typeof(ObservableCollection<GameAbonentI
                 this.SetValue(AbonentsProperty, value);
             }
         }
+        #endregion Свойства
         public AbonentsControl()
         {
             InitializeComponent();
         }
 
-        private void MenuItemClick(object sender, RoutedEventArgs e)
-        {
-            if (sender != null)
-            {
-                MenuItem mi = (MenuItem)sender;
-                InterfaceCommand cmd = (InterfaceCommand)mi.Tag;
-                cmd.Execute(Selected);
-            }
-        }
 
        private void ListboxClicked(object sender, MouseButtonEventArgs e)
         {

@@ -17,5 +17,9 @@ namespace AncientHorrorClient.Commands
                        (
                                "Выкинуть из комнаты", "KickUser", typeof(Commands)
                        );
+        public static readonly RoutedUICommand RemoveFromChat = new RoutedUICommand
+                       (
+                               "Удалить из чата", "RemoveFormChat", typeof(Commands)
+                       );
     }
 }

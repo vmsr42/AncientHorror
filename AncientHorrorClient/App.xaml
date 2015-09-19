@@ -4,6 +4,10 @@
              xmlns:wind="clr-namespace:AncientHorrorClient.Windows"
              StartupUri="Windows/ConnectWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/ApStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

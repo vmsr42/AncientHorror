@@ -26,7 +26,7 @@ namespace AncientHorrorClient.Windows
     /// </summary>
     public partial class RoomWindow : BaseWindow
     {
-        
+        #region Свойства
         private string error = String.Empty;
         public String Error
         {
@@ -80,6 +80,7 @@ namespace AncientHorrorClient.Windows
         public ObservableCollection<GameRoomInfo> Rooms { get; set; }
         public ObservableCollection<GameAbonentInfo> Abonents { get; set; }
         public ObservableCollection<ChatMessage> Messages { get; set; }
+        #endregion Свойства
         public RoomWindow()
             : base(false)
         {
@@ -95,7 +96,7 @@ namespace AncientHorrorClient.Windows
             InitializeComponent();
         }
 
-
+        #region Отслеживание изменений
 
         private void Abonents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -226,6 +227,7 @@ namespace AncientHorrorClient.Windows
             foreach (var rm in newAbns)
                 Abonents.Add(rm);
         }
+        #endregion Отслеживание изменений
 
         public override void Dispose()
         {
@@ -236,10 +238,7 @@ namespace AncientHorrorClient.Windows
             Abonents.CollectionChanged -= Abonents_CollectionChanged;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Messages.Add(new ChatMessage() { Abonent = Abonent, Roomid = Room.Id, RoomName = Room.Name, Time = DateTime.Now, Message = "вошел в комнату" });
-        }
+        #region Команды интервейса
 
         private void AddToChatCan(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -272,6 +271,6 @@ namespace AncientHorrorClient.Windows
             KickUserMessage kum = new KickUserMessage() { UserId = ab.UserId };
             await Global.NetworkClient.SendMessage(kum);
         }
-        
+        #endregion Команды интервейса
     }
 }

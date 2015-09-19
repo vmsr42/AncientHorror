@@ -21,6 +21,7 @@ namespace AncientHorrorClient.Windows
     /// </summary>
     public partial class PasswordWindow : Window, INotifyPropertyChanged
     {
+        #region Свойства
         public bool Result { get; set; }
         private GameRoomInfo room;
         public GameRoomInfo Room
@@ -32,6 +33,7 @@ namespace AncientHorrorClient.Windows
         }
         public String RoomName { get; set; }
         public String Password { get; set; }
+        #endregion Свойства
         public PasswordWindow(GameRoomInfo room)
         {
             this.room = room;

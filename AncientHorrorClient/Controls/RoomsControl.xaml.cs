@@ -29,6 +29,7 @@ namespace AncientHorrorClient.Controls
     /// </summary>
     public partial class RoomsControl : HeaderedControl
     {
+        #region Команды интервейса
         public bool IsOwner
         {
             get
@@ -154,6 +155,7 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
                 this.SetValue(RoomsProperty, value);
             }
         }
+        #endregion Команды интервейса
         public RoomsControl()
         {
             InitializeComponent();
@@ -171,7 +173,7 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
             OnPropertyChanged("IsOwner");   
             
         }
-
+        //позже перенести в статику чтоб единообразно было
         private void CreateRoomClick(object sender, RoutedEventArgs e)
         {
             Error = String.Empty;
@@ -255,14 +257,14 @@ DependencyProperty.Register("Rooms", typeof(ObservableCollection<GameRoomInfo>),
             OnPropertyChanged("HasError");
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            Selected = null;
-        }
-
         private void StartRoomClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Ну типа стартовал");
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Selected = null;
         }
        
 

@@ -24,17 +24,7 @@ namespace AncientHorrorClient.Controls
     /// </summary>
     public partial class ChatControl : HeaderedControl
     {
-        private RemoveFromChatCmd removeUserCmd = null;
-        public RemoveFromChatCmd RemoveUserCmd
-        {
-            get
-            {
-                if (removeUserCmd == null)
-                    removeUserCmd = new RemoveFromChatCmd(RemoveChanel);
-                return removeUserCmd;
-            }
-        }
-
+        #region Свойства
         public static readonly DependencyProperty MessagesProperty =
 DependencyProperty.Register("Messages", typeof(ObservableCollection<ChatMessage>), typeof(ChatControl));
         public ObservableCollection<ChatMessage> Messages
@@ -97,6 +87,7 @@ DependencyProperty.Register("Messages", typeof(ObservableCollection<ChatMessage>
                 }
             }
         }
+        #endregion Свойства
         public ChatControl()
         {
             InitializeComponent();
@@ -123,5 +114,34 @@ DependencyProperty.Register("Messages", typeof(ObservableCollection<ChatMessage>
         {
             MessageBox.Show("Пока не реализовано, но сообщение было: "+MsgToSend);
         }
+        #region Команды интервейса
+        private void RemoveFromChatCan(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.Parameter is GameAbonentInfo)
+            {
+                GameAbonentInfo ab = e.Parameter as GameAbonentInfo;
+                if (ab.Id > 0)
+                    e.CanExecute = true;
+                else
+                    e.CanExecute = false;
+            }
+            else
+                e.CanExecute = false;
+        }
+
+        private void RemoveFromChatExec(object sender, ExecutedRoutedEventArgs e)
+        {
+            GameAbonentInfo ab = e.Parameter as GameAbonentInfo;
+            if (Chanels.Contains(ab))
+            {
+                if (selected.Equals(ab))
+                {
+                    Selected = Chanels.ElementAt(Chanels.IndexOf(ab) - 1);
+                }
+                Chanels.Remove(ab);
+            }
+
+        }
+        #endregion Команды интервейса
     }
 }

@@ -21,6 +21,7 @@ namespace AncientHorrorClient.Windows
     /// </summary>
     public partial class ConnectWindow : BaseWindow
     {
+        #region Свойства
         public String Error { get; set; }
         public Visibility HasError
         {
@@ -33,6 +34,7 @@ namespace AncientHorrorClient.Windows
             }
         }
         public String Login { get; set; }
+        #endregion Свойства
         public ConnectWindow():base(true)
         {
             InitializeComponent();

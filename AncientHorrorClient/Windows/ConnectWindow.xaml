@@ -3,14 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wind="clr-namespace:AncientHorrorClient.Windows"
     xmlns:main="clr-namespace:AncientHorrorClient"
-    xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.Windows.ConnectWindow"
+     x:Class="AncientHorrorClient.Windows.ConnectWindow"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         x:Name="ConnWind"
         Title="Ancient Horror"  >
-    <wind:BaseWindow.Resources>
-        <Converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
-        <Converters:BMEToVisibilityConverter x:Key="BMEToVisibilityConverter"/>
-    </wind:BaseWindow.Resources>
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="/AncientHorrorClient;component/Assets/Images/ktulhu.jpg"/>

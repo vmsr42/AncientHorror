@@ -20,6 +20,7 @@ namespace AncientHorrorClient.Windows
     /// </summary>
     public partial class CreateRoomWindow : Window, INotifyPropertyChanged
     {
+        #region Свойства
         public bool Result { get; set; }
         public String Error { get; set; }
         public Visibility HasError
@@ -35,6 +36,7 @@ namespace AncientHorrorClient.Windows
         public String RoomName { get; set; }
         public String Capability { get; set; }
         public String Password { get; set; }
+        #endregion Свойства
         public CreateRoomWindow()
         {
             var parent = Global.CurrentWindow;

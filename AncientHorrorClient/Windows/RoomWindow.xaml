@@ -1,0 +1,50 @@
+﻿<wind:BaseWindow x:Class="AncientHorrorClient.Windows.RoomWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wind="clr-namespace:AncientHorrorClient.Windows" x:Name="RoomWind"
+        xmlns:cntrl="clr-namespace:AncientHorrorClient.Controls"
+        xmlns:cmd="clr-namespace:AncientHorrorClient.Commands"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:local="clr-namespace:AncientHorrorClient"
+        xmlns:Converters="clr-namespace:AncientHorrorClient.Converters"
+        Title="Ancient Horror">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:Commands.AddToChat" CanExecute="AddToChatCan" Executed="AddToChatExec"/>
+        <CommandBinding Command="cmd:Commands.KickUser" CanExecute="KickUserCan" Executed="KickUserExec"/>
+    </Window.CommandBindings>
+    <Grid IsHitTestVisible="{Binding Path=(local:Global.Status), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BMEToBoolConverter} }">
+        <Grid.Background>
+            <ImageBrush ImageSource="/AncientHorrorClient;component/Assets/Images/ktulhu.jpg"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Border Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"  CornerRadius="30"  Width="400" Height="200" Visibility="{Binding Path=(local:Global.Status), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BMEToVisibilityConverter}}" Panel.ZIndex="1" >
+            <Border.Background>
+                <SolidColorBrush Color="Gainsboro" Opacity="0.8"/>
+            </Border.Background>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="0.4*"/>
+                </Grid.RowDefinitions>
+                <metro:ProgressRing IsActive="True"  />
+                <TextBlock Grid.Row="1" Text="{Binding  Path=(local:Global.Status), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Times New Roman" FontSize="18" Visibility="{Binding  Path=(local:Global.Status), Converter={StaticResource BMEToVisibilityConverter}}" />
+            </Grid>
+        </Border>
+
+        <cntrl:RoomsControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Rooms="{Binding Rooms,ElementName=RoomWind}" Reverse="True" ReverseExpandBtnVisibility="Visible" MinimizeBtnVisibility="Visible" ExpandBtnVisibility="Collapsed"/>
+        <cntrl:AbonentsControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Abonents="{Binding Abonents,ElementName=RoomWind}" Reverse="False" ReverseExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ExpandBtnVisibility="Visible"/>
+        <cntrl:ChatControl x:Name="Chat" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Messages="{Binding Messages,ElementName=RoomWind}" Reverse="False" ReverseExpandBtnVisibility="Collapsed" MinimizeBtnVisibility="Visible" ExpandBtnVisibility="Visible"/>
+        <Grid Grid.Row="0" Grid.Column="1" Background="Silver">
+            <TextBlock Text="{Binding Abonent.Name, ElementName=RoomWind}" Foreground="DarkGreen" FontSize="20" FontFamily="Rockwell Extra Bold" HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+</wind:BaseWindow>

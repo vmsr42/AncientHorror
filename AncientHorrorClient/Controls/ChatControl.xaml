@@ -4,190 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"  x:Name="Chat" Tag="Чат"
+             xmlns:cmd="clr-namespace:AncientHorrorClient.Commands"
              xmlns:t="clr-namespace:AncientHorrorClient.Controls"
-             xmlns:conv="clr-namespace:AncientHorrorClient.Converters" Reverse="False" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Collapsed" ExpandBtnVisibility="Visible"
+             Reverse="False" MinimizeBtnVisibility="Visible" ReverseExpandBtnVisibility="Collapsed" ExpandBtnVisibility="Visible"
              d:DesignHeight="300" d:DesignWidth="300">
-    <t:HeaderedControl.Resources>
-        <conv:BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
-        <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
-        <Style x:Key="MyTabStyle" TargetType="{x:Type TabControl}">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabControl}">
-                        <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="ColumnDefinition0"/>
-                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
-                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TabPanel x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="True"  Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
-                            <Border x:Name="contentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2">
-                                <ScrollViewer>
-                                <ItemsControl ItemsSource="{Binding DataContext, RelativeSource={RelativeSource TemplatedParent}}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="15"/>
-                                                    <RowDefinition Height="25"/>
-                                                </Grid.RowDefinitions>
-                                                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                                    <TextBlock  Text="{Binding RoomName}" Foreground="DarkGoldenrod"/>
-                                                    <TextBlock Text=": " Foreground="DarkGoldenrod"/>
-                                                    <TextBlock  Text="{Binding Time}" Margin="2,0,0,0" Foreground="DarkGoldenrod"/>
-                                                </StackPanel>
-                                                <Grid Grid.Row="1">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                            <ColumnDefinition Width="Auto"/>
-                                                            <ColumnDefinition Width="Auto"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock  Grid.Column="0"  Text="{Binding Abonent.Name}" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="Black"/>
-                                                        <TextBlock Grid.Column="1" Text="{Binding Message}" Margin="2,0,0,0" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    </Grid>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                </ScrollViewer>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="TabStripPlacement" Value="Bottom">
-                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
-                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                                <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
-                                <Setter Property="Margin" TargetName="headerPanel" Value="0"/>
-                            </Trigger>
-                            <Trigger Property="TabStripPlacement" Value="Left">
-                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
-                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                                <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
-                                <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
-                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
-                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
-                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                                <Setter Property="Margin" TargetName="headerPanel" Value="0"/>
-                            </Trigger>
-                            <Trigger Property="TabStripPlacement" Value="Right">
-                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
-                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                                <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
-                                <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
-                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
-                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
-                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                                <Setter Property="Margin" TargetName="headerPanel" Value="0"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style    x:Key="ButtonFocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="MetroButton" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
-            <Setter Property="Background" Value="#EEEEEEEE"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Ellipse Name ="OuterRing" Width ="35" Height ="25" Fill ="DarkGreen"/>
-                            <Ellipse Name ="InnerRing" Width ="33" Height ="23" Fill ="MintCream"/>
-                            <ContentPresenter 
-                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                 Margin="{TemplateBinding Padding}" 
-                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                 RecognizesAccessKey="True" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="OpacityMask" Value="#AA888888"/>
-                                <Setter Property="Margin" Value="2 1" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Foreground" Value="Gainsboro"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="IncreasedMetroButton" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
-            <Setter Property="Background" Value="#EEEEEEEE"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Ellipse Name ="OuterRing" Width ="58" Height ="38" Fill ="DarkGreen"/>
-                            <Ellipse Name ="InnerRing" Width ="56" Height ="36" Fill ="MintCream"/>
-                            <ContentPresenter 
-                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                 Margin="{TemplateBinding Padding}" 
-                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                 RecognizesAccessKey="True" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="OpacityMask" Value="#AA888888"/>
-                                <Setter Property="Margin" Value="2 1" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Foreground" Value="Gainsboro"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </t:HeaderedControl.Resources>
+    <t:HeaderedControl.CommandBindings>
+        <CommandBinding Command="cmd:Commands.RemoveFromChat" CanExecute="RemoveFromChatCan" Executed="RemoveFromChatExec"/>
+    </t:HeaderedControl.CommandBindings>
     <Grid Background="Gainsboro">
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -206,7 +29,7 @@
                             <ColumnDefinition Width="40"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Column="1" Content="&#57606;" FontFamily="Segoe UI Symbol" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TabItem }}"  Command="{Binding Path=RemoveUserCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=t:HeaderedControl}}" CommandParameter="{Binding}" Visibility="{Binding IsEnabled, Converter={StaticResource BoolVisibilityConverter}, RelativeSource={RelativeSource Self}}" Style="{StaticResource MetroButton}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button Grid.Column="1" Content="&#57606;" FontFamily="Segoe UI Symbol" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TabItem }}" CommandParameter="{Binding}" Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}" Command="cmd:Commands.RemoveFromChat"  Style="{StaticResource MetroButton}" HorizontalAlignment="Center" VerticalAlignment="Center">
                         </Button>
                     </Grid>
                     
@@ -214,6 +37,6 @@
             </TabControl.ItemTemplate>
         </TabControl>
         <TextBox Grid.Row="1" Grid.Column="0" Margin="1,0,1,1" Text="{Binding MsgToSend, ElementName=Chat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Background="#FFE8E7E7"/>
-        <Button Grid.Column="1" Grid.Row="1" Margin="1,0,1,1" Content="&#57625;" FontFamily="Segoe UI Symbol" Style="{StaticResource IncreasedMetroButton}" Click="SendClick"/>
+        <Button Grid.Column="1" Grid.Row="1" Margin="1,0,1,1" Content="&#57625;" FontFamily="Segoe UI Symbol" Style="{StaticResource IncreasedMetroButton58}" Click="SendClick"/>
     </Grid>
 </t:HeaderedControl>

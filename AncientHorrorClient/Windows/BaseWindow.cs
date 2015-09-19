@@ -10,7 +10,7 @@ namespace AncientHorrorClient.Windows
 {
     public class BaseWindow: Window, INotifyPropertyChanged
     {
-        
+        #region Свойства
         private Boolean ismain;
         public Boolean IsMain
         {
@@ -19,6 +19,8 @@ namespace AncientHorrorClient.Windows
                 return ismain;
             }
         }
+        #endregion Свойства
+        #region Конструкторы
         public BaseWindow()
         {
             ismain = false;
@@ -29,6 +31,8 @@ namespace AncientHorrorClient.Windows
             
             this.ismain = ismain;
         }
+        #endregion Конструкторы
+        #region Методы
         public void ShowWindow()
         {
             if (Global.CurrentWindow != null)
@@ -44,7 +48,7 @@ namespace AncientHorrorClient.Windows
                 Global.CurrentWindow = null;
         }
         public virtual void Dispose() { }
-
+        #endregion Методы
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string property)

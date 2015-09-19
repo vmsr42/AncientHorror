@@ -4,99 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:t="clr-namespace:AncientHorrorClient.Controls"
-             xmlns:Converters="clr-namespace:AncientHorrorClient.Converters" x:Class="AncientHorrorClient.Controls.RoomsControl"
+              x:Class="AncientHorrorClient.Controls.RoomsControl"
              mc:Ignorable="d" Tag="{Binding Room.Name, ElementName=rmCntrl}"
              d:DesignHeight="600" d:DesignWidth="600" x:Name="rmCntrl" >
-    <t:HeaderedControl.Resources>
-        <Converters:CapabilityVisibilityConverter x:Key="CapabilityVisibilityConverter"/>
-        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
-        <Style    x:Key="ButtonFocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="IncreasedMetroButton" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
-            <Setter Property="Background" Value="#EEEEEEEE"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Ellipse Name ="OuterRing" Width ="150" Height ="34" Fill ="DarkGreen"/>
-                            <Ellipse Name ="InnerRing" Width ="148" Height ="32" Fill ="MintCream"/>
-                            <ContentPresenter 
-                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                 Margin="{TemplateBinding Padding}" 
-                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                 RecognizesAccessKey="True" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="OpacityMask" Value="#AA888888"/>
-                                <Setter Property="Margin" Value="2 1" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Foreground" Value="Gainsboro"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="StartMetroButton" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
-            <Setter Property="Background" Value="#EEEEEEEE"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Ellipse Name ="OuterRing" Width ="150" Height ="50" Fill ="DarkRed"/>
-                            <Ellipse Name ="InnerRing" Width ="145" Height ="45" Fill ="#FFE00404"/>
-                            <ContentPresenter 
-                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                 Margin="{TemplateBinding Padding}" 
-                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                 RecognizesAccessKey="True"  />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="OpacityMask" Value="#AA888888"/>
-                                <Setter Property="Margin" Value="2 1" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Foreground" Value="Gainsboro"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </t:HeaderedControl.Resources>
     <ScrollViewer>
     <Grid Background="Gainsboro">
         <Grid.RowDefinitions>
@@ -156,9 +66,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         <DockPanel Grid.Row="{Binding ButtonsRow, ElementName=rmCntrl}" Background="Gainsboro" HorizontalAlignment="Center" Margin="10,0,10,0" Height="38" >
-            <Button Content="Создать комнату" Click="CreateRoomClick" Visibility="{Binding IsCreateRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource IncreasedMetroButton}"/>
-            <Button Content="Присоединиться" Click="JoinRoomClick" Visibility="{Binding IsJoinRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource IncreasedMetroButton}"/>
-            <Button Content="Выйти из комнаты" Click="ExitRoomClick" Style="{StaticResource IncreasedMetroButton}"  Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, ElementName=rmCntrl, Mode=OneWay}"/>
+            <Button Content="Создать комнату" Click="CreateRoomClick" Visibility="{Binding IsCreateRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource IncreasedMetroButton150}"/>
+            <Button Content="Присоединиться" Click="JoinRoomClick" Visibility="{Binding IsJoinRVisible, ElementName=rmCntrl, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource IncreasedMetroButton150}"/>
+            <Button Content="Выйти из комнаты" Click="ExitRoomClick" Style="{StaticResource IncreasedMetroButton150}"  Visibility="{Binding Room.IsLobby, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, ElementName=rmCntrl, Mode=OneWay}"/>
         </DockPanel>
     </Grid>
     </ScrollViewer>
