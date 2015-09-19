@@ -14,7 +14,7 @@
     </Window.CommandBindings>
     <Grid IsHitTestVisible="{Binding Path=(local:Global.Status), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BMEToBoolConverter} }">
         <Grid.Background>
-            <ImageBrush ImageSource="/AncientHorrorClient;component/Assets/Images/ktulhu.jpg"/>
+            <ImageBrush ImageSource="/AncientHorrorClient;component/Assets/Images/SilverKey.jpg"/>
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
