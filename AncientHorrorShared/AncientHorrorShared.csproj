@@ -57,6 +57,8 @@
     <Compile Include="Messaging\InfoMessage\ServerInfoMessage.cs" />
     <Compile Include="Messaging\InfoMessage\SIMessageType.cs" />
     <Compile Include="Messaging\InfoMessage\ServerInfoRoomsMessage.cs" />
+    <Compile Include="Messaging\PlayerCommands\PlayerCommandMessage.cs" />
+    <Compile Include="Messaging\PlayerCommands\PCTypes.cs" />
     <Compile Include="Messaging\TransportContainer.cs" />
     <Compile Include="Messaging\TCTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

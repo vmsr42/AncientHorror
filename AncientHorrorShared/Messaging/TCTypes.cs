@@ -10,6 +10,7 @@ namespace AncientHorrorShared.Messaging
     {
         Info,
         AbonentCommand,
-        Confirm
+        Confirm,
+        PlayerCommand
     }
 }

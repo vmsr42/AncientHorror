@@ -35,15 +35,13 @@ namespace AncientHorror.Server
                     {
                         bool done = false;
 
-                        if (this.RemoveAbonent(ab))
-                        {
+                        RemoveAbonent(ab);
                             Program.Lobby.AddAbonent(ab);
                             if (ab.Gamer.Id == this.Owner.Id)
                             {
                                 AfterRemoveOwner();
                             }
                             done = true;
-                        }
                         if (acMsg.GetInnerMessage().NeedConfirm)
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
@@ -82,14 +80,12 @@ namespace AncientHorror.Server
                     {
                         bool done = false;
                         KickUserMessage kickmsg = (KickUserMessage)acMsg.GetInnerMessage();
-                        Abonent kickedab = this.abntsList.FirstOrDefault(a => a.Gamer.Id==kickmsg.UserId);
+                        Abonent kickedab = this.AbnsToList().FirstOrDefault(a => a.Gamer.Id==kickmsg.UserId);
                         if (kickedab!=null)
                         {
-                            if (this.RemoveAbonent(kickedab))
-                            {
+                            this.RemoveAbonent(kickedab);
                                 Program.Lobby.AddAbonent(kickedab);
                                 done = true;
-                            }
                         }
                         if (acMsg.GetInnerMessage().NeedConfirm)
                         {
@@ -106,7 +102,7 @@ namespace AncientHorror.Server
         }
         protected override void AfterRemoveOwner()
         {
-            foreach (var remab in abntsList)
+            foreach (var remab in AbnsToList())
             {
                 this.RemoveAbonent(remab);
                 Program.Lobby.AddAbonent(remab);

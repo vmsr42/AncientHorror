@@ -11,6 +11,7 @@ namespace AncientHorror.Server
 {
     public class LobbyRoom: Room
     {
+        int usrid = 1;
         private int roomnumber = 1;
         public LobbyRoom(): base(0,0,"Lobby", null)
         { }
@@ -27,8 +28,9 @@ namespace AncientHorror.Server
                         AuthorizationMessage amsg = (AuthorizationMessage)acMsg.GetInnerMessage();
                         //реализация логики авторизации пока пусть будет типа авторизован
                         ab.Status = AbonentStatusEnum.Authorized;
-                        ab.Gamer.Id = 1;
-                        ab.Gamer.UserId = 1;
+                        ab.Gamer.Id = usrid;
+                        ab.Gamer.UserId = usrid;
+                        usrid++;
                         ab.Gamer.Name = amsg.Login;
                         done = true;
                         if (amsg.NeedConfirm)
@@ -72,16 +74,9 @@ namespace AncientHorror.Server
                         CreateRoomMessage crmsg = (CreateRoomMessage)acMsg.GetInnerMessage();
                         GameRoom room = new GameRoom(roomnumber, crmsg.Name, crmsg.Password, ab.Gamer, crmsg.Capability);
                         Program.Rooms.Add(room);
-                        if (this.RemoveAbonent(ab))
-                        {
-                            room.AddAbonent(ab);
+                        RemoveAbonent(ab);
+                        room.AddAbonent(ab);
                             done = true;
-                        }
-                        else
-                        {
-                            this.AddAbonent(ab);
-                            done = false;
-                        }
                         if (acMsg.GetInnerMessage().NeedConfirm)
                         {
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
@@ -101,11 +96,9 @@ namespace AncientHorror.Server
                             GameRoom room = (GameRoom)Program.Rooms.FirstOrDefault(r => r.Id == jrmsg.RoomId);
                             if (room != null)
                             {
-                                if (this.RemoveAbonent(ab))
-                                {
+                                this.RemoveAbonent(ab);
                                     room.AddAbonent(ab, jrmsg.Password);
                                     done = true;
-                                }
                             }
                         }
                         if (acMsg.GetInnerMessage().NeedConfirm)

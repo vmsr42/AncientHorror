@@ -49,7 +49,7 @@ namespace AncientHorrorClient.Network
                         OnAbonentChanged(abon);
                     }
                 }
-                if (!value.Equals(abon))
+                else if (!value.Equals(abon))
                 {
                     abon = value;
                     OnAbonentChanged(abon);
@@ -80,10 +80,10 @@ namespace AncientHorrorClient.Network
                     if (room != value)
                     {
                         room = value;
-                        OnRoomChanged(room);
+                        
                     }
                 }
-                if (!value.Equals(room))
+                else if (!value.Equals(room))
                 {
                     room = value;
                     OnRoomChanged(room);

@@ -54,19 +54,35 @@ namespace AncientHorror.Server
             this._name = name;
             Owner = own;
         }
-        protected BlockingCollection<Abonent> abntsList = new BlockingCollection<Abonent>();
+        object listlocker = new object();
+        private List<Abonent> abnsList = new List<Abonent>();
+        protected void AddToAbList(Abonent ab)
+        {
+            lock(listlocker)
+            {
+                abnsList.Add(ab);
+            }
+        }
+        protected List<Abonent> AbnsToList()
+        {
+            lock(listlocker)
+            {
+                return abnsList;
+            }
+        }
+        protected void RemoveFromAbList(Abonent ab)
+        {
+            lock(listlocker)
+            {
+                abnsList.Remove(ab);
+            }
+        }
         public void SendMessage(TransportContainer msg)
         {
             msg.Room = this.GetGameRoomInfo();
-            foreach (var abn in abntsList)
+            foreach (var abn in AbnsToList())
             {
-                msg.User = abn.Gamer;
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    var data = Encoding.UTF8.GetBytes(msg.UTFSerialize());
-                    ms.Write(data, 0, data.Length);
-                    abn.Sock.Send(ms.ToArray());
-                }
+                abn.SendMessage(msg);
             }
         }
         public bool AddAbonent(Abonent ab)
@@ -77,10 +93,10 @@ namespace AncientHorror.Server
                     return false;
                 if (CanAddAbonent)
                 {
-                    abntsList.Add(ab);
+                    AddToAbList(ab);
                     ab.CurrentRoom = this;
                     capacity++;
-                    ab.Sock.BeginReceive(ab.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
+                    ab.Sender.Sock.BeginReceive(ab.Sender.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
                     return true;
                 }
                 else
@@ -95,16 +111,12 @@ namespace AncientHorror.Server
         public void SendRoomStatusMessage()
         {
             var msg = new ServerInfoAbonentsMessage() { Abonents = new List<GameAbonentInfo>() };
-            foreach (var abon in abntsList)
+            foreach (var abon in AbnsToList())
                 msg.Abonents.Add(abon.Gamer);
             var smsg = msg.GetTC();
             this.SendMessage(smsg);
         }
-        private void ClearBuffer(byte[] buffer)
-        {
-            for (int i = 0; i < buffer.Length; i++)
-                buffer[i] = 0;
-        }
+
 
 
 
@@ -114,13 +126,13 @@ namespace AncientHorror.Server
 
                 try
                 {
-                    ab.Sock.EndReceive(ar);
+                    ab.Sender.Sock.EndReceive(ar);
                     if (ab.Status != AbonentStatusEnum.Disconnected)
                     {
                         
                             try
                             {
-                                string utf8 = Encoding.UTF8.GetString(ab.buffer);
+                                string utf8 = Encoding.UTF8.GetString(ab.Sender.buffer);
 
                                 char[] removed = new char[1];
                                 removed[0] = (char)0;
@@ -137,20 +149,16 @@ namespace AncientHorror.Server
                                             break;
                                         }
                                 }
-                                if (abntsList.Contains(ab))
-                                {
-
-                                }
                             }
                             catch (Exception ex)
                             {
 
                             }
-                            ClearBuffer(ab.buffer);
-                            if (this.abntsList.Contains(ab))
+                            ab.Sender.ClearBuffer();
+                            if (this.AbnsToList().Contains(ab))
                             {
-                                ClearBuffer(ab.buffer);
-                                ab.Sock.BeginReceive(ab.buffer, 0, 4096, 0, new AsyncCallback(AfterRecieve), ab);
+                                ab.Sender.ClearBuffer();
+                                ab.Sender.Sock.BeginReceive(ab.Sender.buffer, 0, 4096, 0, new AsyncCallback(AfterRecieve), ab);
                                 return;
                             }
                             
@@ -167,8 +175,8 @@ namespace AncientHorror.Server
                 {
                     if (ab.Status == AbonentStatusEnum.Disconnected)
                     {
-                        ab.Sock.Close();
-                        this.abntsList.TryTake(out ab);
+                        ab.Sender.Sock.Close();
+                        RemoveFromAbList(ab);
                         if (ab.Gamer.Id == this.Owner.Id)
                             AfterRemoveOwner();
                     }
@@ -178,16 +186,13 @@ namespace AncientHorror.Server
         }
 
         protected abstract void AfterRemoveOwner();
-        public bool RemoveAbonent(Abonent ab)
+        public void RemoveAbonent(Abonent ab)
         {
-            if (abntsList.TryTake(out ab))
-            {
+            RemoveFromAbList(ab);
+            
                 ab.CurrentRoom = null;
                 capacity--;
-                return true;
-            }
-            else
-                return false;
+           
         }
         public GameRoomInfo GetGameRoomInfo()
         {

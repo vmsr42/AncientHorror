@@ -1,4 +1,5 @@
-﻿using AncientHorrorShared;
+﻿using AncientHorror.Net;
+using AncientHorrorShared;
 using AncientHorrorShared.Messaging;
 using System;
 using System.Collections.Generic;
@@ -16,21 +17,14 @@ namespace AncientHorror.Server
         public Room CurrentRoom{get;set;}
         public GameAbonentInfo Gamer { get; set; }
         public AbonentStatusEnum Status { get; set; }
-        public Socket Sock { get; set; }
-        public byte[] buffer = new byte[4096];
-        public StringBuilder sb = new StringBuilder();
+        public SingleSender Sender { get; set; }
         public void SendMessage(TransportContainer msg)
         {
             if (this.CurrentRoom != null)
             {
                 msg.Room = this.CurrentRoom.GetGameRoomInfo();
                 msg.User = this.Gamer;
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    var data = Encoding.UTF8.GetBytes(msg.UTFSerialize());
-                    ms.Write(data, 0, data.Length);
-                    this.Sock.Send(ms.ToArray());
-                }
+                Sender.SendMessage(msg);
             }
         }
     }

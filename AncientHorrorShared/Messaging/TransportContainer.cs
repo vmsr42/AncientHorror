@@ -1,6 +1,7 @@
 ﻿using AncientHorrorShared.Messaging.AbonentsCommand;
 using AncientHorrorShared.Messaging.ConfirmMessage;
 using AncientHorrorShared.Messaging.InfoMessage;
+using AncientHorrorShared.Messaging.PlayerCommands;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,6 +44,12 @@ namespace AncientHorrorShared.Messaging
                 case TCTypes.Confirm:
                     {
                         ServerConfirmMessage msg = new ServerConfirmMessage();
+                        msg.UTFDeSerialize(this.Message);
+                        return msg;
+                    }
+                case TCTypes.PlayerCommand:
+                    {
+                        PlayerCommandMessage msg = new PlayerCommandMessage();
                         msg.UTFDeSerialize(this.Message);
                         return msg;
                     }
