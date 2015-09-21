@@ -36,6 +36,57 @@ namespace AncientHorror.Server
         }
         private int capacity = 0;
         private int Capability = 0;
+        #region SyncList
+        object listlocker = new object();
+        private List<Abonent> abnsList = new List<Abonent>();
+        protected void AddToAbList(Abonent ab)
+        {
+            lock (listlocker)
+            {
+                abnsList.Add(ab);
+            }
+        }
+        protected List<Abonent> AbnsToList()
+        {
+            lock (listlocker)
+            {
+                return abnsList;
+            }
+        }
+        protected void RemoveFromAbList(Abonent ab)
+        {
+            lock (listlocker)
+            {
+                abnsList.Remove(ab);
+            }
+        }
+        #endregion SyncList
+        public Room(int capability, int id, string name, GameAbonentInfo own)
+        {
+            this.Capability = capability;
+            this._id = id;
+            this._name = name;
+            Owner = own;
+        }
+        #region Sending
+        public void SendMessage(TransportContainer msg)
+        {
+            msg.Room = this.GetGameRoomInfo();
+            foreach (var abn in AbnsToList())
+            {
+                abn.SendMessage(msg);
+            }
+        }
+        public void SendRoomStatusMessage()
+        {
+            var msg = new ServerInfoAbonentsMessage() { Abonents = new List<GameAbonentInfo>() };
+            foreach (var abon in AbnsToList())
+                msg.Abonents.Add(abon.Gamer);
+            var smsg = msg.GetTC();
+            this.SendMessage(smsg);
+        }
+        #endregion Sending
+        #region WorkingWithAbonents
         public Boolean CanAddAbonent
         {
             get
@@ -45,44 +96,6 @@ namespace AncientHorror.Server
                 if (capacity < Capability)
                     return true;
                 return false;
-            }
-        }
-        public Room(int capability, int id, string name, GameAbonentInfo own)
-        {
-            this.Capability = capability;
-            this._id = id;
-            this._name = name;
-            Owner = own;
-        }
-        object listlocker = new object();
-        private List<Abonent> abnsList = new List<Abonent>();
-        protected void AddToAbList(Abonent ab)
-        {
-            lock(listlocker)
-            {
-                abnsList.Add(ab);
-            }
-        }
-        protected List<Abonent> AbnsToList()
-        {
-            lock(listlocker)
-            {
-                return abnsList;
-            }
-        }
-        protected void RemoveFromAbList(Abonent ab)
-        {
-            lock(listlocker)
-            {
-                abnsList.Remove(ab);
-            }
-        }
-        public void SendMessage(TransportContainer msg)
-        {
-            msg.Room = this.GetGameRoomInfo();
-            foreach (var abn in AbnsToList())
-            {
-                abn.SendMessage(msg);
             }
         }
         public bool AddAbonent(Abonent ab)
@@ -96,6 +109,11 @@ namespace AncientHorror.Server
                     AddToAbList(ab);
                     ab.CurrentRoom = this;
                     capacity++;
+                    if (this.Id==0)
+                    {
+                        var roomsmsg = new ServerInfoRoomsMessage() { Rooms = Program.GetRoomsInfo() };
+                        ab.SendMessage(roomsmsg.GetTC());
+                    }
                     ab.Sender.Sock.BeginReceive(ab.Sender.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
                     return true;
                 }
@@ -108,16 +126,14 @@ namespace AncientHorror.Server
                 return false;
             }
         }
-        public void SendRoomStatusMessage()
+        public void RemoveAbonent(Abonent ab)
         {
-            var msg = new ServerInfoAbonentsMessage() { Abonents = new List<GameAbonentInfo>() };
-            foreach (var abon in AbnsToList())
-                msg.Abonents.Add(abon.Gamer);
-            var smsg = msg.GetTC();
-            this.SendMessage(smsg);
+            RemoveFromAbList(ab);
+            ab.CurrentRoom = null;
+            capacity--;
+
         }
-
-
+        #endregion WorkingWithAbonents
 
 
         private void AfterRecieve(IAsyncResult ar)
@@ -176,9 +192,10 @@ namespace AncientHorror.Server
                     if (ab.Status == AbonentStatusEnum.Disconnected)
                     {
                         ab.Sender.Sock.Close();
-                        RemoveFromAbList(ab);
+                        RemoveAbonent(ab);
                         if (ab.Gamer.Id == this.Owner.Id)
                             AfterRemoveOwner();
+                        this.SendRoomStatusMessage();
                     }
                 }
                 catch { }
@@ -186,14 +203,8 @@ namespace AncientHorror.Server
         }
 
         protected abstract void AfterRemoveOwner();
-        public void RemoveAbonent(Abonent ab)
-        {
-            RemoveFromAbList(ab);
-            
-                ab.CurrentRoom = null;
-                capacity--;
-           
-        }
+
+
         public GameRoomInfo GetGameRoomInfo()
         {
             var info = new GameRoomInfo();

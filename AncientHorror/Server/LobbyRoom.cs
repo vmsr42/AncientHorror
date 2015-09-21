@@ -40,6 +40,7 @@ namespace AncientHorror.Server
                             ab.SendMessage(smsg);
                         }
                         SendRoomStatusMessage();
+
                         break;
                     }
                 case AbonentsCommandType.UnAuthorization:
@@ -85,6 +86,8 @@ namespace AncientHorror.Server
                         }
                         ab.CurrentRoom.SendRoomStatusMessage();
                         SendRoomStatusMessage();
+                        var roomsmsg = new ServerInfoRoomsMessage() { Rooms = Program.GetRoomsInfo() };
+                        Program.Lobby.SendMessage(roomsmsg.GetTC());
                         break;
                     }
                 case AbonentsCommandType.JoinRoom:
@@ -112,12 +115,7 @@ namespace AncientHorror.Server
                     }
                 case AbonentsCommandType.RequestRoomInfo:
                     {
-                        ServerInfoRoomsMessage riMessage = new ServerInfoRoomsMessage() { Rooms = new List<GameRoomInfo>() };
-                        foreach (var room in Program.Rooms)
-                            if (room.Id > 0)
-                            {
-                                riMessage.Rooms.Add(room.GetGameRoomInfo());
-                            }
+                        ServerInfoRoomsMessage riMessage = new ServerInfoRoomsMessage() { Rooms = Program.GetRoomsInfo() };
                         var smsg = riMessage.GetTC();
                         ab.SendMessage(smsg);
                         break;

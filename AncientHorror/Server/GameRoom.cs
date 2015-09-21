@@ -107,8 +107,12 @@ namespace AncientHorror.Server
                 this.RemoveAbonent(remab);
                 Program.Lobby.AddAbonent(remab);
             }
-            Program.Lobby.SendRoomStatusMessage();
             Program.Rooms.Remove(this);
+            Program.Lobby.SendRoomStatusMessage();
+
+            var roomsmsg = new ServerInfoRoomsMessage() { Rooms = Program.GetRoomsInfo() };
+            Program.Lobby.SendMessage(roomsmsg.GetTC());
+            
         }
 
         protected override bool HavePassword()

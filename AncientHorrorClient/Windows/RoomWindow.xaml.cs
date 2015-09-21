@@ -120,16 +120,18 @@ namespace AncientHorrorClient.Windows
         {
             if (Room.IsLobby)
             {
-                foreach (var item in e.NewItems)
-                {
-                    GameRoomInfo rm = (GameRoomInfo)item;
-                    Messages.Add(new ChatMessage() { Abonent = rm.Owner, Roomid = rm.Id, RoomName = rm.Name, Time = DateTime.Now, Message = "создал комнату "  });
-                }
-                foreach (var item in e.OldItems)
-                {
-                    GameRoomInfo rm = (GameRoomInfo)item;
-                    Messages.Add(new ChatMessage() { Abonent = rm.Owner, Roomid = rm.Id, RoomName = rm.Name, Time = DateTime.Now, Message = "удалил комнату "  });
-                }
+                if (e.NewItems!=null)
+                    foreach (var item in e.NewItems)
+                    {
+                        GameRoomInfo rm = (GameRoomInfo)item;
+                        Messages.Add(new ChatMessage() { Abonent = rm.Owner, Roomid = rm.Id, RoomName = rm.Name, Time = DateTime.Now, Message = "создал комнату "  });
+                    }
+                if (e.OldItems != null)
+                    foreach (var item in e.OldItems)
+                    {
+                        GameRoomInfo rm = (GameRoomInfo)item;
+                        Messages.Add(new ChatMessage() { Abonent = rm.Owner, Roomid = rm.Id, RoomName = rm.Name, Time = DateTime.Now, Message = "удалил комнату "  });
+                    }
             }
         }
 

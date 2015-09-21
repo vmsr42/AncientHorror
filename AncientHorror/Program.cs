@@ -37,6 +37,15 @@ namespace AncientHorror
 
             }
         }
+        public static List<GameRoomInfo> GetRoomsInfo()
+        {
+            List<GameRoomInfo> list = new List<GameRoomInfo>();
+            foreach (var room in Rooms)
+            {
+                list.Add(room.GetGameRoomInfo());
+            }
+            return list;
+        }
         static void Main(string[] args)
         {
         try
