@@ -54,8 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\GameObjects\ControlledObject.cs" />
-    <Compile Include="Game\Logic\Game.cs" />
-    <Compile Include="Game\Enviroment\GameEnviroment.cs" />
+    <Compile Include="Game\GameObjects\ControlStatusEnum.cs" />
+    <Compile Include="Game\MultiPlayerGame.cs" />
     <Compile Include="Game\GameObjects\GameObject.cs" />
     <Compile Include="Game\GameObjects\ObjectController.cs" />
     <Compile Include="Game\Logic\GameLogic.cs" />

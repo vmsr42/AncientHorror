@@ -11,7 +11,7 @@ namespace AncientHorror.Net
 {
     public class SingleSender
     {
-        public Socket Sock { get; set; }
+        private Socket Sock { get; set; }
         public byte[] buffer = new byte[4096];
         public void SendMessage(TransportContainer msg)
         {
@@ -30,6 +30,19 @@ namespace AncientHorror.Net
         {
             for (int i = 0; i < buffer.Length; i++)
                 buffer[i] = 0;
+        }
+        public IAsyncResult BeginReceive(AsyncCallback callback, object state)
+        {
+            return Sock.BeginReceive(buffer, 0, 4096, SocketFlags.None, callback, state);
+        }
+        public int EndReceive(IAsyncResult ar)
+        {
+            return Sock.EndReceive(ar);
+        }
+        public void Close()
+        {
+            ClearBuffer();
+            Sock.Close();
         }
     }
 }

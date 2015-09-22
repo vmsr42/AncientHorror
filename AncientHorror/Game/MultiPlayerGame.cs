@@ -7,11 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AncientHorror.Game.Enviroment;
+using System.Threading;
+using AncientHorror.Game.Logic;
 
-namespace AncientHorror.Game.Logic
+namespace AncientHorror.Game
 {
-    public class Game
+    public class MultiPlayerGame
     {
         private DateTime gameTime = DateTime.Now;
         public DateTime GameTime
@@ -21,12 +22,11 @@ namespace AncientHorror.Game.Logic
                 return gameTime;
             }
         }
-        public GameEnviroment GameEnviroment { get; private set; }
         private List<ObjectController> Controllers { get; set; }
-        private GameLogic GameLogic;
-        public Game(List<Abonent> abonents, GameLogic logic )
+        private GameLogic Logic;
+        public MultiPlayerGame(List<Abonent> abonents, GameLogic logic)
         {
-            logic = GameLogic;
+            Logic = logic;
             Controllers = new List<ObjectController>();
             foreach (var ab in abonents)
                 Controllers.Add(new ObjectController(ab));
@@ -38,18 +38,19 @@ namespace AncientHorror.Game.Logic
             var contrl = Controllers.FirstOrDefault(c => c.Id == userId);
             if (contrl!=null)
             {
-                if (contrl.WaitngMessageTypes.Contains(msg.Type)&&contrl.PlayerMessage!=null)
+                if (contrl.HasType(msg.Type)&&contrl.PlayerMessage!=null)
                 {
-                    contrl.WaitngMessageTypes = new ConcurrentBag<PCTypes>();
+                    contrl.SetMsgTypes(null);
                     contrl.PlayerMessage = msg;
                     res = true;
                 }
             }
             return res;
         }
-        public void Start()
+        public void Start(Action<Task> after)
         {
-            GameEnviroment = GameLogic.InitGameObjects();
+            Logic.InitGameObjects(Controllers);
+            Task.Factory.StartNew(Logic.Run).ContinueWith(after);
             
         }
 

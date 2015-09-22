@@ -1,4 +1,6 @@
-﻿using AncientHorrorShared.Messaging.PlayerCommands;
+﻿using AncientHorror.Net;
+using AncientHorrorShared.Messaging;
+using AncientHorrorShared.Messaging.PlayerCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +12,55 @@ namespace AncientHorror.Game.GameObjects
 {
     public abstract class ControlledObject: GameObject
     {
+        public ControlStatusEnum ControlStatus { get; set; }
         private ObjectController control;
         public ControlledObject(ObjectController contr)
             : base(contr.Id)
         {
             this.control = contr;
+            ControlStatus = ControlStatusEnum.Controlled;
         }
-        protected void SendMessage()
+        public void SendMessage(BaseMessage msg)
         {
-
+            if (ControlStatus == ControlStatusEnum.Controlled)
+            {
+                try
+                {
+                    control.SendMessage(msg);
+                }
+                catch
+                {
+                    ControlStatus =  ControlStatusEnum.LostControl;
+                }
+            }
         }
-        protected async Task<PlayerCommandMessage> RecieveMessage()
+        public void AskQuestion(BaseMessage msg, List<PCTypes> answerTypes)
         {
-            
+            if (ControlStatus == ControlStatusEnum.Controlled)
+            {
+                try
+                {
+                    control.SetMsgTypes(answerTypes);
+                    control.PlayerMessage = null;
+                    control.SendMessage(msg);
+                }
+                catch
+                {
+                    ControlStatus = ControlStatusEnum.LostControl;
+                }
+            }
+        }
+        public Task<PlayerCommandMessage> WaitAnswer(int timeout)
+        {
+            if (ControlStatus == ControlStatusEnum.Controlled)
+                return control.WaitAnswer(timeout);
+            else
+                return new Task<PlayerCommandMessage>(() => { return null; });
+        }
+        public void RestoreConnect(SingleSender connect)
+        {
+            if (ControlStatus == ControlStatusEnum.LostControl)
+                control.Reconnect(connect);
         }
         
     }

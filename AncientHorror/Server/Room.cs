@@ -114,7 +114,7 @@ namespace AncientHorror.Server
                         var roomsmsg = new ServerInfoRoomsMessage() { Rooms = Program.GetRoomsInfo() };
                         ab.SendMessage(roomsmsg.GetTC());
                     }
-                    ab.Sender.Sock.BeginReceive(ab.Sender.buffer, 0, 4096, SocketFlags.None, new AsyncCallback(AfterRecieve), ab);
+                    ab.Sender.BeginReceive(new AsyncCallback(AfterRecieve), ab);
                     return true;
                 }
                 else
@@ -142,7 +142,7 @@ namespace AncientHorror.Server
 
                 try
                 {
-                    ab.Sender.Sock.EndReceive(ar);
+                    ab.Sender.EndReceive(ar);
                     if (ab.Status != AbonentStatusEnum.Disconnected)
                     {
                         
@@ -174,7 +174,7 @@ namespace AncientHorror.Server
                             if (this.AbnsToList().Contains(ab))
                             {
                                 ab.Sender.ClearBuffer();
-                                ab.Sender.Sock.BeginReceive(ab.Sender.buffer, 0, 4096, 0, new AsyncCallback(AfterRecieve), ab);
+                                ab.Sender.BeginReceive( new AsyncCallback(AfterRecieve), ab);
                                 return;
                             }
                             
@@ -191,7 +191,7 @@ namespace AncientHorror.Server
                 {
                     if (ab.Status == AbonentStatusEnum.Disconnected)
                     {
-                        ab.Sender.Sock.Close();
+                        ab.Sender.Close();
                         RemoveAbonent(ab);
                         if (ab.Gamer.Id == this.Owner.Id)
                             AfterRemoveOwner();

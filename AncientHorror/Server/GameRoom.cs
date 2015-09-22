@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using AncientHorror.Game;
 namespace AncientHorror.Server
 {
     public class GameRoom: Room
@@ -70,6 +70,8 @@ namespace AncientHorror.Server
                         bool done = false;
                         if (acMsg.GetInnerMessage().NeedConfirm)
                         {
+                            MultiPlayerGame game = new MultiPlayerGame(this.AbnsToList(),);
+                            game.Start(AfterGameEnd);
                             ServerConfirmMessage confirm = new ServerConfirmMessage() { Accept = done, RefMsgId = acMsg.MsgId };
                             var smsg = confirm.GetTC();
                             ab.SendMessage(smsg);
@@ -100,6 +102,12 @@ namespace AncientHorror.Server
  
             }
         }
+
+        private void AfterGameEnd(Task obj)
+        {
+            
+        }
+
         protected override void AfterRemoveOwner()
         {
             foreach (var remab in AbnsToList())
