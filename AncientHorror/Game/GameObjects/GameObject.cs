@@ -13,6 +13,16 @@ namespace AncientHorror.Game.GameObjects
         {
             Id = id;
         }
-
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            GameObject second = (GameObject)obj;
+            return second.Id == this.Id;
+        }
+        public override int GetHashCode()
+        {
+            return this.Id;
+        }
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AncientHorror.Game
+namespace AncientHorror.Game.Logic
 {
-    public enum StageEnum
+    public abstract class Stage
     {
-        Intitialization
     }
 }

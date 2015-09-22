@@ -53,10 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\GameObjects\ControlledObject.cs" />
+    <Compile Include="Game\Logic\Game.cs" />
+    <Compile Include="Game\Enviroment\GameEnviroment.cs" />
     <Compile Include="Game\GameObjects\GameObject.cs" />
-    <Compile Include="Game\GameObjects\Player.cs" />
-    <Compile Include="Game\StageEnum.cs" />
+    <Compile Include="Game\GameObjects\ObjectController.cs" />
+    <Compile Include="Game\Logic\GameLogic.cs" />
+    <Compile Include="Game\Logic\Stage.cs" />
     <Compile Include="Net\SingleSender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,9 +79,7 @@
       <Name>AncientHorrorShared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Map\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
