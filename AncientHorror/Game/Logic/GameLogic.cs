@@ -1,5 +1,4 @@
-﻿using AncientHorror.Game.Enviroment;
-using AncientHorror.Game.GameObjects;
+﻿using AncientHorror.Game.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

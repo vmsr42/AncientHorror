@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using AncientHorror.Game.Logic;
+using AncientHorrorShared.Messaging.GameLogic;
 
 namespace AncientHorror.Game
 {
@@ -49,6 +50,11 @@ namespace AncientHorror.Game
         }
         public void Start(Action<Task> after)
         {
+            foreach (var contr in Controllers)
+            {
+                contr.SetMsgTypes(null);
+                contr.SendMessage(new StartGameMessage());
+            }
             Logic.InitGameObjects(Controllers);
             Task.Factory.StartNew(Logic.Run).ContinueWith(after);
             

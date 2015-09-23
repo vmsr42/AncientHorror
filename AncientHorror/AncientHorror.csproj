@@ -55,11 +55,11 @@
   <ItemGroup>
     <Compile Include="Game\GameObjects\ControlledObject.cs" />
     <Compile Include="Game\GameObjects\ControlStatusEnum.cs" />
+    <Compile Include="Game\Logic\AHLogic.cs" />
     <Compile Include="Game\MultiPlayerGame.cs" />
     <Compile Include="Game\GameObjects\GameObject.cs" />
     <Compile Include="Game\GameObjects\ObjectController.cs" />
     <Compile Include="Game\Logic\GameLogic.cs" />
-    <Compile Include="Game\Logic\Stage.cs" />
     <Compile Include="Net\SingleSender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

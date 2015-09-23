@@ -15,6 +15,8 @@ namespace AncientHorror.Game.GameObjects
 {
     public class ObjectController
     {
+        private GameAbonentInfo gamer;
+        private GameRoomInfo room;
         public int Id { get; set; }
         public object msglocker = new object();
         public object senderlocker = new object();
@@ -59,11 +61,16 @@ namespace AncientHorror.Game.GameObjects
         }
         public void SendMessage(BaseMessage msg)
         {
-            Sender.SendMessage(msg.GetTC());
+            var mes = msg.GetTC();
+            mes.User = gamer;
+            mes.Room = room;
+            Sender.SendMessage(mes);
         }
         private ConcurrentBag<PCTypes> waitngMessageTypes = new ConcurrentBag<PCTypes>();
         public ObjectController(Abonent ab)
         {
+            room = ab.CurrentRoom.GetGameRoomInfo();
+            gamer = ab.Gamer;
             this.Id = ab.Gamer.UserId;
             this.Sender = ab.Sender;
             this.Name = ab.Gamer.Name;
@@ -71,7 +78,7 @@ namespace AncientHorror.Game.GameObjects
         public Task<PlayerCommandMessage> WaitAnswer(int timeout)
         {
             Func<object, PlayerCommandMessage> action = new Func<object, PlayerCommandMessage>(GetPCM);
-            return Task<PlayerCommandMessage>.Factory.StartNew(action, timeout);
+            return new Task<PlayerCommandMessage>(action,timeout, TaskCreationOptions.None);
 
         }
         private PlayerCommandMessage GetPCM(object time)

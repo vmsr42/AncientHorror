@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AncientHorror.Game.Logic
+namespace AncientHorrorShared.Messaging.PlayerCommands
 {
-    public abstract class Stage
+    public enum GITypes
     {
     }
 }
